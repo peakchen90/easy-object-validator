@@ -7,16 +7,16 @@ const Validate = require('./Validate');
  */
 function validator(target, options) {
   let isValid = false;
-  if (target) {
+  if (Validate.type(target) === 'object') {
     isValid = Object.keys(options).every(key => {
       const value = target[key];
-      const validate = options[key]
-      if (Validate.type(validate) === 'object') {
-        // 如果是对象，递归校验
-        validateObject(value, validate);
-      } else if (validate instanceof Validate) {
+      const validate = options[key];
+      if (validate instanceof Validate) {
         // 执行校验规则
         return validate.$doValidate(value);
+      } else if (Validate.type(validate) === 'object') {
+        // 如果是对象，递归校验
+        return validator(value, validate);
       } else {
         throw new TypeError(`The validator of ${key} is not a right validator`);
       }
@@ -36,14 +36,14 @@ validator.extend = (options) => {
     if (Validate.type(validateFn) !== 'function') {
       throw new TypeError('validateFn must be a function');
     }
+
+    // 在Validate原型上定义校验方法
     Object.defineProperty(Validate.prototype, name, {
       value() {
-        return () => {
-          this.$validRules.push(() => {
-            return validRules(this.value);
-          })
-          return this;
-        }
+        this.$validRules.push(() => {
+          return validateFn(this.value);
+        });
+        return this;
       },
       configurable: true,
       enumerable: false

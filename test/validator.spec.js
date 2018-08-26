@@ -1,5 +1,5 @@
-const Validate = require('../Validate');
-const validator = require('../index');
+const Validate = require('../src/Validate');
+const validator = require('../src/index');
 
 describe('Validate', () => {
   let validate;
@@ -64,6 +64,16 @@ describe('Validate', () => {
     expect(validate.$doValidate(null)).toBeFalsy();
   })
 
+  test('not function', () => {
+    validate.not().string();
+    expect(validate.$doValidate(123)).toBeTruthy();
+  })
+
+  test('not function 2', () => {
+    validate.not().not().string();
+    expect(validate.$doValidate('foo')).toBeTruthy();
+  })
+
   test('return this', () => {
     validate.string().isRequire().length(5).test(/^foo/);
     expect(validate.$doValidate('foo66')).toBeTruthy();
@@ -71,26 +81,83 @@ describe('Validate', () => {
 
   test('Validate.type', () => {
     expect(Validate.type({})).toBe('object')
+    expect(Validate.type(null)).toBe('null')
     expect(Validate.type([])).toBe('array')
     expect(Validate.type('foo')).toBe('string')
   })
 })
 
 describe('validator', () => {
-  let ctx; // 模拟Koa的ctx
-  beforeEach(() => {
-    request = {
-      query: {
-        foo: 123,
-        bar: {}
+  const obj = {
+    foo: 123,
+    bar: 'hello',
+    child: {
+      foo: true,
+      bar: [1, 2, 3, 4],
+      child: {
+        bar: null
       }
     }
+  }
+
+  test('plain object', () => {
+    expect(validator(obj, {
+      foo: validator.number().isRequire(),
+      bar: validator.string().isRequire(),
+      child: validator.object()
+    })).toBeTruthy();
   })
 
-  test('return function', () => {
-    const f = validator('query', {});
-    expect(f).toEqual(expect.any(Function));
+  test('object detail', () => {
+    expect(validator(obj, {
+      foo: validator.test(/^\d+$/),
+      bar: validator.string().length(5),
+      child: {
+        foo: validator.boolean().isRequire(),
+        bar: validator.array().length(4),
+        child: validator.object()
+      }
+    })).toBeTruthy();
+    expect(validator(obj, {
+      child: {
+        child: {
+          bar: validator.test(/null/)
+        }
+      }
+    })).toBeTruthy();
+  })
+})
+
+describe('validator extend', () => {
+  validator.extend({
+    isNull(value) {
+      return value === null;
+    },
+    isUppercase(value) {
+      return /^[A-Z]+$/.test(value);
+    }
+  });
+  const obj = {
+    foo: null,
+    bar: 'HELLO'
+  }
+
+  test('extend', () => {
+    expect(validator(obj, {
+      foo: validator.isNull(),
+      bar: validator.isUppercase().length(5).isRequire()
+    })).toBeTruthy();
   })
 
+  test('extend 2', () => {
+    validator.extend({
+      any(value) {
+        return true;
+      }
+    });
 
+    expect(validator(obj, {
+      bar: validator.isUppercase().any().isRequire()
+    })).toBeTruthy();
+  })
 })

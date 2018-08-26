@@ -8,12 +8,18 @@ function type(value) {
 
 // 校验类
 function Validate() {
+  if (!this instanceof Validate) {
+    throw new Error('Validate should be called with the `new` keyword');
+  }
   // 保存校验规则
   this.$validRules = [];
+  // 置反标志，如果为true，将校验结果置反
+  this.$flag = false;
   // 最后执行所有校验规则
   this.$doValidate = (value) => {
     this.value = value;
-    return this.$validRules.every(rule => rule());
+    const ret = this.$validRules.every(rule => rule());
+    return this.$flag ? !ret : ret;
   }
 }
 Validate.type = type;
@@ -73,6 +79,12 @@ Validate.prototype = {
     this.$validRules.push(() => {
       return type(this.value) === typeName;
     });
+    return this;
+  },
+
+  // 将校验结果置反
+  not() {
+    this.$flag = !this.$flag;
     return this;
   }
 }
