@@ -16,10 +16,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/peakchen90/koa-params-validator"
+    "url": "https://github.com/peakchen90/object-validator.js"
   },
   "bugs": {
-    "url": "https://github.com/peakchen90/koa-params-validator/issues"
+    "url": "https://github.com/peakchen90/object-validator.js/issues"
   },
   "author": "peakchen90 <1558267774@qq.com>",
   "license": "MIT",
