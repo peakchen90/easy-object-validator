@@ -61,5 +61,7 @@ validator.array = () => new Validate().array()
 validator.boolean = () => new Validate().boolean()
 validator.isRequire = () => new Validate().isRequire()
 validator.test = (regexp) => new Validate().test(regexp)
+validator.is = (typeName) => new Validate().is(typeName)
+validator.not = () => new Validate().not()
 
 module.exports = validator;

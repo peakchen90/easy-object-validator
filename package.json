@@ -1,7 +1,7 @@
 {
   "name": "easy-object-validator",
   "version": "0.0.2",
-  "description": "校验一个对象的属性值是否合法",
+  "description": "深度校验一个对象的属性值是否合法",
   "main": "dist/validator.js",
   "module": "src/index.js",
   "scripts": {
@@ -11,6 +11,7 @@
   "keywords": [
     "objcet validator",
     "object",
+    "deep validate",
     "validator",
     "validate",
     "validation"
