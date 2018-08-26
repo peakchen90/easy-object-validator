@@ -7,6 +7,7 @@
 # easy-object-validator
 深度校验一个对象的属性值是否合法
 
+> [更新日志](./CHANGELOG.md)
 
 ## Feature
 - 支持 Node、浏览器端完美运行
@@ -255,7 +256,7 @@ validator({
 
 
 #### **2.9. `validator.is` : Function(typeName)**
-  - 判断值的类型，用法与 <a href="#1-9-validate-is-typename-">validate.is()</a> 方法类似
+  - 判断值的类型，用法与 [validate.is()](#19-validateistypename) 方法类似
   - {String} typeName 类型名（小写）
   - 返回 Validate 对象
 
