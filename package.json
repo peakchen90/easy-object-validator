@@ -1,0 +1,30 @@
+{
+  "name": "object-validator.js",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/validator.js",
+  "module": "dist/validator.js",
+  "scripts": {
+    "build": "rollup index.js --file dist/validator.js --format cjs",
+    "test": "jest"
+  },
+  "keywords": [
+    "objcet validator",
+    "object",
+    "validator",
+    "validate"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/peakchen90/koa-params-validator"
+  },
+  "bugs": {
+    "url": "https://github.com/peakchen90/koa-params-validator/issues"
+  },
+  "author": "peakchen90 <1558267774@qq.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^23.5.0",
+    "rollup": "^0.65.0"
+  }
+}
