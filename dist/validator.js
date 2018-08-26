@@ -1,5 +1,5 @@
 /**
- * easy-object-valodator version 0.0.2 
+ * easy-object-valodator version 1.0.0 
  */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -197,6 +197,12 @@
   };
   validator.test = function (regexp) {
     return new Validate_1().test(regexp);
+  };
+  validator.is = function (typeName) {
+    return new Validate_1().is(typeName);
+  };
+  validator.not = function () {
+    return new Validate_1().not();
   };
 
   var src = validator;
