@@ -3,6 +3,7 @@
 
 
 [![Travis (.org) branch](https://img.shields.io/travis/peakchen90/easy-object-validator/master.svg)](https://travis-ci.org/peakchen90/easy-object-validator)
+[![Codecov](https://img.shields.io/codecov/c/github/peakchen90/easy-object-validator.svg)](https://codecov.io/gh/peakchen90/easy-object-validator)
 [![npm](https://img.shields.io/npm/v/easy-object-validator.svg)](https://www.npmjs.com/package/easy-object-validator)
 [![npm](https://img.shields.io/npm/dt/easy-object-validator.svg)](https://www.npmjs.com/package/easy-object-validator)
 [![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/peakchen90/easy-object-validator/blob/master/LICENSE)
