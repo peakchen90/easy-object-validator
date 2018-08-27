@@ -70,53 +70,111 @@ const validate = new Validate();
 // 这个过程不会执行校验动作
 validate.string().length(5).isRequire()
 // 执行校验
-validate.$doValidate('hello') // true
+validate.doValidate('hello') // true
 ```
 
-**实例方法：**
+> 1.1 实例属性：
 
-#### 1.1 `validate.string()`
+#### 1.1.1 `validate.value`
+  - 校验的值，可以通过实例方法 validate.doValidate(value) 传参设值
+  - {any}
+
+> 1.2 实例方法：
+
+#### 1.2.1 `validate.doValidate(value)`
+  - 执行校验方法
+  - {any} value 执行校验的值
+  - 返回 undefined
+
+#### 1.2.2 `validate.string()`
   - 校验字符串
   - 返回 Validate 对象
 
-#### 1.2 `validate.number()`
+#### 1.2.3 `validate.number()`
   - 校验数字
   - 返回 Validate 对象
 
-#### 1.3 `validate.object()`
+#### 1.2.4 `validate.object()`
   - 校验数组
   - 返回 Validate 对象
 
-#### 1.4 `validate.array()`
+#### 1.2.5 `validate.array()`
   - 校验数字
   - 返回 Validate 对象
 
-#### 1.5 `validate.boolean()`
+#### 1.2.6 `validate.boolean()`
   - 校验布尔值
   - 返回 Validate 对象
 
-#### 1.6 `validate.isRequire()`
+#### 1.2.7 `validate.isRequire()`
   - 校验值不为空 (null/undefined/空字符串)
   - 返回 Validate 对象
 
-#### 1.7 `validate.length(len)`
+#### 1.2.8 `validate.length(len)`
   - 校验长度 (仅支持有length属性的值，如字符串，数组，方法 等)
   - {Number} len 期望的长度值
   - 返回 Validate 对象
 
-#### 1.8 `validate.test(regexp)`
+#### 1.2.9 `validate.test(regexp)`
   - 正则校验
   - {RegExp} regepx 校验的正则表达式
   - 返回 Validate 对象
 
-#### 1.9 `validate.is(typeName)`
+#### 1.2.10 `validate.is(typeName)`
   - 校验值为指定的类型，调用 Object.prototype.toString 判断，类型名是全小写的 (如: string/number/object/null 等)
   - {String} typeName 类型名称
   - 返回 Validate 对象
 
-#### 1.10 `validate.not()`
+#### 1.2.11 `validate.not()`
   - 将校验结果置反，可以多次使用
   - 返回 Validate 对象
+
+#### 1.2.12 `validate.arrayOf(validate)`
+  - 校验数组元素
+  - {Validate} validate
+  - 返回 Validate 对象
+
+```js
+const validate = new Validate()
+
+// 创建一个新的Validate对象，避免污染
+// 可以通过validator上方法快速创建Validate对象
+const v = new Validate().string()  // 等同于 const v = validator.string()
+
+validate.arrayOf(v).doValidate(['foo'])  // true
+```
+
+#### 1.2.13 `validate.oneOf(...validator)`
+  - 校验规则能匹配到其中的一个就算校验成功
+  - {Validate} validator 可以传多个Validate对象
+  - 返回 Validate 对象
+
+```js
+let validate = new Validate()
+// 创建一个新的Validate对象，避免污染
+const v1 = new Validate().string()
+const v2 = new Validate().number()
+validate.oneOf(v1, v2).doValidate('foo')  // true
+
+validate = new Validate()
+validate.oneOf(v1, v2).doValidate(123)  // true
+```
+
+#### 1.2.14 `validate.reset()`
+  - 将调用reset方法之前的校验规则重置，之后的校验规则不影响
+  - 返回 Validate 对象
+
+```js
+let validate = new Validate()
+validate.string().doValidate('foo')  // true
+validate.number().doValidate(123)  // false
+
+// reset
+validate = new Validate()
+validate.string().doValidate('foo')  // true
+validate.reset().number().doValidate(123)  // true
+```
+
 
 
 ### **2. `validator` : Function(object, options)**

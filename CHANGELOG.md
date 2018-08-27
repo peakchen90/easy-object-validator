@@ -5,6 +5,7 @@
 > 2018.08.27
 
 - Fix bug: validator.extend() 新增 Function 的属性或方法作为保留关键字
+- Add: 新增方法 validate.arrayOf()、validate.oneOf()、validate.reset()
 
 
 ## 1.0.0

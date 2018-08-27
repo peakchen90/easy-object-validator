@@ -8,7 +8,7 @@ function type(value) {
 
 // 校验类
 function Validate() {
-  if (!this instanceof Validate) {
+  if (!(this instanceof Validate)) {
     throw new Error('Validate should be called with the `new` keyword');
   }
   // 保存校验规则
@@ -16,9 +16,14 @@ function Validate() {
   // 置反标志，如果为true，将校验结果置反
   this.$flag = false;
   // 最后执行所有校验规则
-  this.$doValidate = (value) => {
+  this.doValidate = (value) => {
     this.value = value;
-    const ret = this.$validRules.every(rule => rule());
+    const ret = this.$validRules.every(rule => {
+      if (Validate.type(rule) === 'array') {
+        return rule.some(validate => validate.doValidate(value));
+      }
+      return rule()
+    });
     return this.$flag ? !ret : ret;
   }
 }
@@ -85,6 +90,37 @@ Validate.prototype = {
   // 将校验结果置反
   not() {
     this.$flag = !this.$flag;
+    return this;
+  },
+
+  // 校验数组的元素
+  arrayOf(validate) {
+    if (!(validate instanceof Validate)) {
+      throw new TypeError('The parameter must be a instance of Validate');
+    }
+    this.$validRules.push(() => {
+      return type(this.value) === 'array' &&
+        this.value.every(item => {
+          return validate.doValidate(item);
+        });
+    });
+    return this;
+  },
+
+  // 多个校验规则，能匹配到一个就算匹配成功
+  oneOf(...validators) {
+    const valid = validators.every(validate => validate instanceof Validate);
+    if (!valid) {
+      throw new TypeError('The parameter must be a instance of Validate');
+    }
+    this.$validRules.push(validators);
+    return this;
+  },
+
+  // 重置校验规则
+  reset() {
+    this.$validRules = [];
+    this.$flag = false;
     return this;
   }
 }

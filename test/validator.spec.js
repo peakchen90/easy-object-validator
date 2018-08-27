@@ -7,76 +7,105 @@ describe('class Validate', () => {
     validate = new Validate();
   })
 
+  test('called by new', () => {
+    expect(() => Validate()).toThrowError();
+    expect(() => new Validate()).not.toThrowError();
+  })
+
   test('string()', () => {
     validate.string();
-    expect(validate.$doValidate('foo')).toBeTruthy();
+    expect(validate.doValidate('foo')).toBeTruthy();
   })
 
   test('number()', () => {
     validate.number();
-    expect(validate.$doValidate(123)).toBeTruthy();
+    expect(validate.doValidate(123)).toBeTruthy();
   })
 
   test('object()', () => {
     validate.object();
-    expect(validate.$doValidate({})).toBeTruthy();
-    expect(validate.$doValidate(null)).toBeFalsy();
-    expect(validate.$doValidate([])).toBeFalsy();
+    expect(validate.doValidate({})).toBeTruthy();
+    expect(validate.doValidate(null)).toBeFalsy();
+    expect(validate.doValidate([])).toBeFalsy();
   })
 
   test('array()', () => {
     validate.array();
-    expect(validate.$doValidate([])).toBeTruthy();
+    expect(validate.doValidate([])).toBeTruthy();
   })
 
   test('boolean()', () => {
     validate.boolean();
-    expect(validate.$doValidate(true)).toBeTruthy();
-    expect(validate.$doValidate(false)).toBeTruthy();
+    expect(validate.doValidate(true)).toBeTruthy();
+    expect(validate.doValidate(false)).toBeTruthy();
   })
 
   test('isRequire()', () => {
     validate.isRequire();
-    expect(validate.$doValidate('foo')).toBeTruthy();
-    expect(validate.$doValidate({})).toBeTruthy();
-    expect(validate.$doValidate('')).toBeFalsy();
-    expect(validate.$doValidate(null)).toBeFalsy();
-    expect(validate.$doValidate(undefined)).toBeFalsy();
+    expect(validate.doValidate('foo')).toBeTruthy();
+    expect(validate.doValidate({})).toBeTruthy();
+    expect(validate.doValidate('')).toBeFalsy();
+    expect(validate.doValidate(null)).toBeFalsy();
+    expect(validate.doValidate(undefined)).toBeFalsy();
   })
 
   test('length()', () => {
     validate.length(3);
-    expect(validate.$doValidate('foo')).toBeTruthy();
-    expect(validate.$doValidate([1, 2, 3])).toBeTruthy();
-    expect(validate.$doValidate((a, b, c) => {})).toBeTruthy();
-    expect(validate.$doValidate({})).toBeFalsy();
+    expect(validate.doValidate('foo')).toBeTruthy();
+    expect(validate.doValidate([1, 2, 3])).toBeTruthy();
+    expect(validate.doValidate((a, b, c) => {})).toBeTruthy();
+    expect(validate.doValidate({})).toBeFalsy();
   })
 
   test('test()', () => {
     validate.test(/^foo/);
-    expect(validate.$doValidate('foo bar')).toBeTruthy();
-    expect(validate.$doValidate('bar foo')).toBeFalsy();
+    expect(validate.doValidate('foo bar')).toBeTruthy();
+    expect(validate.doValidate('bar foo')).toBeFalsy();
   })
 
   test('is()', () => {
     validate.is('object');
-    expect(validate.$doValidate({})).toBeTruthy();
-    expect(validate.$doValidate(null)).toBeFalsy();
+    expect(validate.doValidate({})).toBeTruthy();
+    expect(validate.doValidate(null)).toBeFalsy();
   })
 
   test('not()', () => {
     validate.not().string();
-    expect(validate.$doValidate(123)).toBeTruthy();
+    expect(validate.doValidate(123)).toBeTruthy();
   })
 
   test('not() 2', () => {
     validate.not().not().string();
-    expect(validate.$doValidate('foo')).toBeTruthy();
+    expect(validate.doValidate('foo')).toBeTruthy();
+  })
+
+  test('arrayOf()', () => {
+    // 需要创建一个新的 Validate 对象
+    validate.arrayOf(new Validate().string().isRequire()).length(3);
+    expect(validate.doValidate(['Alice', 'Bob', 'Cindy'])).toBeTruthy();
+    expect(() => {
+      new Validate().arrayOf('string').doValidate(['foo'])
+    }).toThrowError()
+  })
+
+  test('oneOf()', () => {
+    const v1 = new Validate().string().length(3)
+    const v2 = new Validate().number()
+    expect(new Validate().oneOf(v1, v2).doValidate(123)).toBeTruthy();
+    expect(new Validate().oneOf(v1, v2).doValidate('foo')).toBeTruthy();
+    expect(() => new Validate().oneOf('bar').doValidate()).toThrowError();
+  })
+
+  test('reset()', () => {
+    validate.string()
+    expect(validate.doValidate('foo')).toBeTruthy();
+    validate.reset().number()
+    expect(validate.doValidate(123)).toBeTruthy();
   })
 
   test('return this', () => {
     validate.string().isRequire().length(5).test(/^foo/);
-    expect(validate.$doValidate('foo66')).toBeTruthy();
+    expect(validate.doValidate('foo66')).toBeTruthy();
   })
 
   test('Validate.type()', () => {
@@ -132,7 +161,7 @@ describe('validator()', () => {
       a: 'foo',
       b: 123,
       c: {},
-      d: [],
+      d: [1, 2, 3],
       e: false,
       f: ''
     }
@@ -140,10 +169,22 @@ describe('validator()', () => {
       a: validator.string().isRequire(),
       b: validator.number(),
       c: validator.object(),
-      d: validator.array().length(0),
+      d: validator.array().length(3),
       e: validator.boolean(),
       f: validator.not().isRequire()
     })).toBeTruthy();
+
+    expect(validator(obj2, {
+      d: validator.arrayOf(validator.number().isRequire()).length(3),
+      e: validator.oneOf(validator.number(), validator.boolean()).isRequire(),
+      f: validator.isRequire().reset().test(/\.*/)
+    })).toBeTruthy();
+
+    expect(() => validator(obj2, {
+      d: 'test',
+    })).toThrowError()
+
+
   })
 })
 
@@ -179,6 +220,12 @@ describe('validator.extend', () => {
       bar: validator.isUppercase().any().isRequire()
     })).toBeTruthy();
   })
+
+  test('extend 3', () => {
+    expect(() => validator.extend({
+      isTruth: true
+    })).toThrowError()
+  })
 })
 
 describe('validator extend reserved keyword', () => {
@@ -186,7 +233,7 @@ describe('validator extend reserved keyword', () => {
     'extend', 'arguments', 'caller', 'length', 'prototype', 'apply', 'bind',
     'call', 'toString', 'toLocaleString', 'name', 'constructor', 'valueOf',
     'hasOwnProperty', 'isPrototypeOf', 'propertyIsEnumerable',
-    '$flag', 'validRules', '$doValidate', 'value'
+    '$flag', '$validRules', 'doValidate', 'value'
   ]
   keywords.forEach(keyword => {
     test(keyword, () => {

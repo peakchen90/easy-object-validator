@@ -13,7 +13,7 @@ function validator(target, options) {
       const validate = options[key];
       if (validate instanceof Validate) {
         // 执行校验规则
-        return validate.$doValidate(value);
+        return validate.doValidate(value);
       } else if (Validate.type(validate) === 'object') {
         // 如果是对象，递归校验
         return validator(value, validate);
@@ -48,8 +48,8 @@ const extendReservedKeyword = [
   'propertyIsEnumerable',
   'valueOf',
   '$flag',
-  'validRules',
-  '$doValidate',
+  '$validRules',
+  'doValidate',
   'value'
 ]
 // 继承，用于自定义校验方法
@@ -61,7 +61,7 @@ validator.extend = (options) => {
 
     const validateFn = options[name];
     if (Validate.type(validateFn) !== 'function') {
-      throw new TypeError('validateFn must be a function');
+      throw new TypeError('The validate func must be a function');
     }
 
     // 在Validate原型上定义校验方法
@@ -90,5 +90,9 @@ validator.isRequire = () => new Validate().isRequire()
 validator.test = (regexp) => new Validate().test(regexp)
 validator.is = (typeName) => new Validate().is(typeName)
 validator.not = () => new Validate().not()
+validator.arrayOf = (validate) => new Validate().arrayOf(validate)
+validator.oneOf = (...validate) => new Validate().oneOf(...validate)
+validator.reset = () => new Validate().reset()
+
 
 module.exports = validator;
