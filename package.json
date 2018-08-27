@@ -32,5 +32,9 @@
     "rollup-plugin-babel": "^3.0.7",
     "rollup-plugin-commonjs": "^9.1.6",
     "rollup-plugin-uglify": "^4.0.0"
+  },
+  "jest": {
+    "coverageDirectory": "./test/coverage/",
+    "collectCoverage": true
   }
 }
