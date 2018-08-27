@@ -1,5 +1,5 @@
 /**
- * easy-object-valodator version 1.0.0 
+ * easy-object-valodator version 1.0.1 
  */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -16,7 +16,7 @@
   function Validate() {
     var _this = this;
 
-    if (!this instanceof Validate) {
+    if (!(this instanceof Validate)) {
       throw new Error('Validate should be called with the `new` keyword');
     }
     // 保存校验规则
@@ -24,9 +24,14 @@
     // 置反标志，如果为true，将校验结果置反
     this.$flag = false;
     // 最后执行所有校验规则
-    this.$doValidate = function (value) {
+    this.doValidate = function (value) {
       _this.value = value;
       var ret = _this.$validRules.every(function (rule) {
+        if (Validate.type(rule) === 'array') {
+          return rule.some(function (validate) {
+            return validate.doValidate(value);
+          });
+        }
         return rule();
       });
       return _this.$flag ? !ret : ret;
@@ -113,6 +118,47 @@
     not: function not() {
       this.$flag = !this.$flag;
       return this;
+    },
+
+
+    // 校验数组的元素
+    arrayOf: function arrayOf(validate) {
+      var _this6 = this;
+
+      if (!(validate instanceof Validate)) {
+        throw new TypeError('The parameter must be a instance of Validate');
+      }
+      this.$validRules.push(function () {
+        return type(_this6.value) === 'array' && _this6.value.every(function (item) {
+          return validate.doValidate(item);
+        });
+      });
+      return this;
+    },
+
+
+    // 多个校验规则，能匹配到一个就算匹配成功
+    oneOf: function oneOf() {
+      for (var _len = arguments.length, validators = Array(_len), _key = 0; _key < _len; _key++) {
+        validators[_key] = arguments[_key];
+      }
+
+      var valid = validators.every(function (validate) {
+        return validate instanceof Validate;
+      });
+      if (!valid) {
+        throw new TypeError('The parameter must be a instance of Validate');
+      }
+      this.$validRules.push(validators);
+      return this;
+    },
+
+
+    // 重置校验规则
+    reset: function reset() {
+      this.$validRules = [];
+      this.$flag = false;
+      return this;
     }
   };
 
@@ -131,7 +177,7 @@
         var validate = options[key];
         if (validate instanceof Validate_1) {
           // 执行校验规则
-          return validate.$doValidate(value);
+          return validate.doValidate(value);
         } else if (Validate_1.type(validate) === 'object') {
           // 如果是对象，递归校验
           return validator(value, validate);
@@ -148,7 +194,7 @@
    */
 
   // 继承保留字段
-  var extendReservedKeyword = ['extend', 'arguments', 'caller', 'length', 'prototype', 'apply', 'bind', 'call', 'toString', 'toLocaleString', 'name', 'constructor', 'hasOwnProperty', 'isPrototypeOf', 'propertyIsEnumerable', 'valueOf', '$flag', 'validRules', '$doValidate', 'value'];
+  var extendReservedKeyword = ['extend', 'arguments', 'caller', 'length', 'prototype', 'apply', 'bind', 'call', 'toString', 'toLocaleString', 'name', 'constructor', 'hasOwnProperty', 'isPrototypeOf', 'propertyIsEnumerable', 'valueOf', '$flag', '$validRules', 'doValidate', 'value'];
   // 继承，用于自定义校验方法
   validator.extend = function (options) {
     Object.keys(options).forEach(function (name) {
@@ -158,7 +204,7 @@
 
       var validateFn = options[name];
       if (Validate_1.type(validateFn) !== 'function') {
-        throw new TypeError('validateFn must be a function');
+        throw new TypeError('The validate func must be a function');
       }
 
       // 在Validate原型上定义校验方法
@@ -209,6 +255,17 @@
   };
   validator.not = function () {
     return new Validate_1().not();
+  };
+  validator.arrayOf = function (validate) {
+    return new Validate_1().arrayOf(validate);
+  };
+  validator.oneOf = function () {
+    var _ref;
+
+    return (_ref = new Validate_1()).oneOf.apply(_ref, arguments);
+  };
+  validator.reset = function () {
+    return new Validate_1().reset();
   };
 
   var src = validator;

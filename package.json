@@ -6,7 +6,8 @@
   "module": "src/index.js",
   "scripts": {
     "build": "rollup --config rollup.config.js",
-    "test": "jest"
+    "test": "jest",
+    "patch":"npm version patch&&npm run build&&npm run patch"
   },
   "keywords": [
     "objcet validator",
