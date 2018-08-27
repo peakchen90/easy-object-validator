@@ -1,13 +1,13 @@
 {
   "name": "easy-object-validator",
-  "version": "1.0.2",
+  "version": "1.0.1",
   "description": "深度校验一个对象的属性值是否合法",
   "main": "dist/validator.js",
   "module": "src/index.js",
   "scripts": {
     "build": "rollup --config rollup.config.js",
     "test": "jest",
-    "patch": "npm version patch&&npm run build&&npm run patch"
+    "patch": "npm version patch&&npm run build&&npm run publish"
   },
   "keywords": [
     "objcet validator",
