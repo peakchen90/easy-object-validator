@@ -180,3 +180,19 @@ describe('validator.extend', () => {
     })).toBeTruthy();
   })
 })
+
+describe('validator extend reserved keyword', () => {
+  const keywords = [
+    'extend', 'arguments', 'caller', 'length', 'prototype', 'apply', 'bind',
+    'call', 'toString', 'toLocaleString', 'name', 'constructor', 'valueOf',
+    'hasOwnProperty', 'isPrototypeOf', 'propertyIsEnumerable',
+    '$flag', 'validRules', '$doValidate', 'value'
+  ]
+  keywords.forEach(keyword => {
+    test(keyword, () => {
+      const options = {}
+      options[keyword] = jest.fn()
+      expect(() => validator.extend(options)).toThrowError(/is reserved keyword/)
+    })
+  })
+})

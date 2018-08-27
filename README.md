@@ -1,15 +1,14 @@
-[![npm](https://img.shields.io/npm/v/:package.svg)](https://www.npmjs.com/package/easy-object-validator)
-[![npm](https://img.shields.io/npm/dt/:package.svg)](https://www.npmjs.com/package/easy-object-validator)
-[![npm bundle size (minified)](https://img.shields.io/bundlephobia/min/react.svg)](https://www.npmjs.com/package/easy-object-validator)
-[![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/peakchen90/easy-object-validator/blob/master/LICENSE)
-
-
 # easy-object-validator
 深度校验一个对象的属性值是否合法
 
+[![npm](https://img.shields.io/npm/v/easy-object-validator.svg)](https://www.npmjs.com/package/easy-object-validator)
+[![npm](https://img.shields.io/npm/dt/easy-object-validator.svg)](https://www.npmjs.com/package/easy-object-validator)
+[![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/peakchen90/easy-object-validator/blob/master/LICENSE)
+
+
 > [更新日志](./CHANGELOG.md)
 
-## Feature
+## Features
 - 支持 Node、浏览器端完美运行
 - 无任何依赖，代码压缩后仅3kb
 - 支持深度对象校验，提供的API友好、易用

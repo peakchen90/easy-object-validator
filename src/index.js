@@ -29,9 +29,36 @@ function validator(target, options) {
  * 暴露校验方法
  */
 
+// 继承保留字段
+const extendReservedKeyword = [
+  'extend',
+  'arguments',
+  'caller',
+  'length',
+  'prototype',
+  'apply',
+  'bind',
+  'call',
+  'toString',
+  'toLocaleString',
+  'name',
+  'constructor',
+  'hasOwnProperty',
+  'isPrototypeOf',
+  'propertyIsEnumerable',
+  'valueOf',
+  '$flag',
+  'validRules',
+  '$doValidate',
+  'value'
+]
 // 继承，用于自定义校验方法
 validator.extend = (options) => {
   Object.keys(options).forEach(name => {
+    if (extendReservedKeyword.includes(name)) {
+      throw new Error(`The arrt \`${name}\` is reserved keyword`);
+    }
+
     const validateFn = options[name];
     if (Validate.type(validateFn) !== 'function') {
       throw new TypeError('validateFn must be a function');
