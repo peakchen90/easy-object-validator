@@ -170,7 +170,8 @@ describe('validator()', () => {
       c: validator.object(),
       d: validator.array().length(3),
       e: validator.boolean(),
-      f: validator.not().isRequire()
+      f: validator.not().isRequire(),
+      g: validator.string()
     })).toBeTruthy();
 
     expect(validator(obj2, {

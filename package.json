@@ -1,6 +1,6 @@
 {
   "name": "easy-object-validator",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "深度校验一个对象的属性值是否合法",
   "main": "dist/validator.js",
   "module": "src/index.js",

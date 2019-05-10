@@ -1,5 +1,5 @@
 /**
- * easy-object-valodator version 1.0.2 
+ * easy-object-valodator version 1.1.2 
  */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -22,7 +22,9 @@
     // 保存校验规则
     this.$validRules = [];
     // 置反标志，如果为true，将校验结果置反
-    this.$flag = false;
+    this.$isOpposite = false;
+    // 必须标志
+    this.$isRequire = false;
     // 最后执行所有校验规则
     this.doValidate = function (value) {
       _this.value = value;
@@ -32,11 +34,16 @@
             return validate.doValidate(value);
           });
         }
+
+        if (!_this.$isRequire && (_this.value == null || _this.value === '')) {
+          return true;
+        }
         return rule();
       });
-      return _this.$flag ? !ret : ret;
+      return _this.$isOpposite ? !ret : ret;
     };
   }
+
   Validate.type = type;
 
   Validate.prototype = {
@@ -74,6 +81,7 @@
     isRequire: function isRequire() {
       var _this2 = this;
 
+      this.$isRequire = true;
       this.$validRules.push(function () {
         return _this2.value != null && _this2.value !== '';
       });
@@ -116,7 +124,7 @@
 
     // 将校验结果置反
     not: function not() {
-      this.$flag = !this.$flag;
+      this.$isOpposite = !this.$isOpposite;
       return this;
     },
 
@@ -157,7 +165,8 @@
     // 重置校验规则
     reset: function reset() {
       this.$validRules = [];
-      this.$flag = false;
+      this.$isOpposite = false;
+      this.$isRequire = false;
       return this;
     }
   };
