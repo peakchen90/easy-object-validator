@@ -287,7 +287,7 @@ validator({
 
 
 #### **2.7. `validator.isRequire` : Function()**
-  - 判断值不为空
+  - 判断值不为空（null、undefined、空字符串）
   - 返回 Validate 对象
 
 ```js

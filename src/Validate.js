@@ -1,9 +1,6 @@
 // 返回一个值的类型（小写字母）
 function type(value) {
-  return Object.prototype.toString.call(value)
-    .slice(0, -1)
-    .slice(8)
-    .toLowerCase();
+  return Object.prototype.toString.call(value).slice(0, -1).slice(8).toLowerCase();
 }
 
 // 校验类
@@ -14,7 +11,9 @@ function Validate() {
   // 保存校验规则
   this.$validRules = [];
   // 置反标志，如果为true，将校验结果置反
-  this.$flag = false;
+  this.$isOpposite = false;
+  // 必须标志
+  this.$isRequire = false;
   // 最后执行所有校验规则
   this.doValidate = (value) => {
     this.value = value;
@@ -22,11 +21,16 @@ function Validate() {
       if (Validate.type(rule) === 'array') {
         return rule.some(validate => validate.doValidate(value));
       }
+
+      if (!this.$isRequire && (this.value == null || this.value === '')) {
+        return true;
+      }
       return rule()
     });
-    return this.$flag ? !ret : ret;
+    return this.$isOpposite ? !ret : ret;
   }
 }
+
 Validate.type = type;
 
 Validate.prototype = {
@@ -57,6 +61,7 @@ Validate.prototype = {
 
   // 必须
   isRequire() {
+    this.$isRequire = true;
     this.$validRules.push(() => {
       return this.value != null && this.value !== '';
     });
@@ -89,7 +94,7 @@ Validate.prototype = {
 
   // 将校验结果置反
   not() {
-    this.$flag = !this.$flag;
+    this.$isOpposite = !this.$isOpposite;
     return this;
   },
 
@@ -120,7 +125,8 @@ Validate.prototype = {
   // 重置校验规则
   reset() {
     this.$validRules = [];
-    this.$flag = false;
+    this.$isOpposite = false;
+    this.$isRequire = false;
     return this;
   }
 }

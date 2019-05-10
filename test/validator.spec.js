@@ -25,7 +25,6 @@ describe('class Validate', () => {
   test('object()', () => {
     validate.object();
     expect(validate.doValidate({})).toBeTruthy();
-    expect(validate.doValidate(null)).toBeFalsy();
     expect(validate.doValidate([])).toBeFalsy();
   })
 
@@ -66,7 +65,7 @@ describe('class Validate', () => {
   test('is()', () => {
     validate.is('object');
     expect(validate.doValidate({})).toBeTruthy();
-    expect(validate.doValidate(null)).toBeFalsy();
+    expect(validate.doValidate([])).toBeFalsy();
   })
 
   test('not()', () => {
