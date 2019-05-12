@@ -1,5 +1,5 @@
 /**
- * easy-object-valodator version 1.1.2 
+ * easy-object-valodator version 1.1.3 
  */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
