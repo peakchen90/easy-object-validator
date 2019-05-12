@@ -5,39 +5,39 @@ describe('class Validate', () => {
   let validate;
   beforeEach(() => {
     validate = new Validate();
-  })
+  });
 
   test('called by new', () => {
     expect(() => Validate()).toThrowError();
     expect(() => new Validate()).not.toThrowError();
-  })
+  });
 
   test('string()', () => {
     validate.string();
     expect(validate.doValidate('foo')).toBeTruthy();
-  })
+  });
 
   test('number()', () => {
     validate.number();
     expect(validate.doValidate(123)).toBeTruthy();
-  })
+  });
 
   test('object()', () => {
     validate.object();
     expect(validate.doValidate({})).toBeTruthy();
     expect(validate.doValidate([])).toBeFalsy();
-  })
+  });
 
   test('array()', () => {
     validate.array();
     expect(validate.doValidate([])).toBeTruthy();
-  })
+  });
 
   test('boolean()', () => {
     validate.boolean();
     expect(validate.doValidate(true)).toBeTruthy();
     expect(validate.doValidate(false)).toBeTruthy();
-  })
+  });
 
   test('isRequire()', () => {
     validate.isRequire();
@@ -46,37 +46,38 @@ describe('class Validate', () => {
     expect(validate.doValidate('')).toBeFalsy();
     expect(validate.doValidate(null)).toBeFalsy();
     expect(validate.doValidate(undefined)).toBeFalsy();
-  })
+  });
 
   test('length()', () => {
     validate.length(3);
     expect(validate.doValidate('foo')).toBeTruthy();
     expect(validate.doValidate([1, 2, 3])).toBeTruthy();
-    expect(validate.doValidate((a, b, c) => {})).toBeTruthy();
+    expect(validate.doValidate((a, b, c) => {
+    })).toBeTruthy();
     expect(validate.doValidate({})).toBeFalsy();
-  })
+  });
 
   test('test()', () => {
     validate.test(/^foo/);
     expect(validate.doValidate('foo bar')).toBeTruthy();
     expect(validate.doValidate('bar foo')).toBeFalsy();
-  })
+  });
 
   test('is()', () => {
     validate.is('object');
     expect(validate.doValidate({})).toBeTruthy();
     expect(validate.doValidate([])).toBeFalsy();
-  })
+  });
 
   test('not()', () => {
     validate.not().string();
     expect(validate.doValidate(123)).toBeTruthy();
-  })
+  });
 
   test('not() 2', () => {
     validate.not().not().string();
     expect(validate.doValidate('foo')).toBeTruthy();
-  })
+  });
 
   test('arrayOf()', () => {
     // 需要创建一个新的 Validate 对象
@@ -85,14 +86,15 @@ describe('class Validate', () => {
     expect(() => {
       new Validate().arrayOf('string').doValidate(['foo'])
     }).toThrowError()
-  })
+  });
 
   test('oneOf()', () => {
-    const v1 = new Validate().string().length(3)
-    const v2 = new Validate().number()
+    const v1 = new Validate().string().length(3);
+    const v2 = new Validate().number();
     expect(new Validate().oneOf(v1, v2).doValidate(123)).toBeTruthy();
     expect(new Validate().oneOf(v1, v2).doValidate('foo')).toBeTruthy();
     expect(() => new Validate().oneOf('bar').doValidate()).toThrowError();
+    expect(new Validate().oneOf(v1, v2).doValidate()).toBeTruthy();
   })
 
   test('reset()', () => {
@@ -108,12 +110,12 @@ describe('class Validate', () => {
   })
 
   test('Validate.type()', () => {
-    expect(Validate.type({})).toBe('object')
-    expect(Validate.type(null)).toBe('null')
-    expect(Validate.type([])).toBe('array')
-    expect(Validate.type('foo')).toBe('string')
-  })
-})
+    expect(Validate.type({})).toBe('object');
+    expect(Validate.type(null)).toBe('null');
+    expect(Validate.type([])).toBe('array');
+    expect(Validate.type('foo')).toBe('string');
+  });
+});
 
 describe('validator()', () => {
   const obj = {

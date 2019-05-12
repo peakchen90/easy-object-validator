@@ -1,9 +1,15 @@
 {
   "name": "easy-object-validator",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "深度校验一个对象的属性值是否合法",
   "main": "dist/validator.js",
   "module": "src/index.js",
+  "types": "types/index.d.ts",
+  "files": [
+    "types",
+    "src",
+    "dist"
+  ],
   "scripts": {
     "build": "rollup --config rollup.config.js",
     "test": "jest"
