@@ -69,6 +69,18 @@ describe('class Validate', () => {
     expect(validate.doValidate([])).toBeFalsy();
   });
 
+  test('equals()', () => {
+    validate.equals('foo');
+    expect(validate.doValidate('foo')).toBeTruthy();
+    expect(validate.doValidate('bar')).toBeFalsy();
+
+    validate.reset();
+    validate.equals('123');
+    expect(validate.doValidate('123')).toBeTruthy();
+    expect(validate.doValidate(123)).toBeFalsy();
+  });
+
+
   test('not()', () => {
     validate.not().string();
     expect(validate.doValidate(123)).toBeTruthy();
@@ -95,19 +107,27 @@ describe('class Validate', () => {
     expect(new Validate().oneOf(v1, v2).doValidate('foo')).toBeTruthy();
     expect(() => new Validate().oneOf('bar').doValidate()).toThrowError();
     expect(new Validate().oneOf(v1, v2).doValidate()).toBeTruthy();
-  })
+  });
+
+  test('enums()', () => {
+    validate.enums('foo', '123');
+    expect(validate.doValidate('foo')).toBeTruthy();
+    expect(validate.doValidate('123')).toBeTruthy();
+    expect(validate.doValidate(123)).toBeFalsy();
+    expect(validate.doValidate('Alice')).toBeFalsy();
+  });
 
   test('reset()', () => {
-    validate.string()
+    validate.string();
     expect(validate.doValidate('foo')).toBeTruthy();
-    validate.reset().number()
+    validate.reset().number();
     expect(validate.doValidate(123)).toBeTruthy();
-  })
+  });
 
   test('return this', () => {
     validate.string().isRequire().length(5).test(/^foo/);
     expect(validate.doValidate('foo66')).toBeTruthy();
-  })
+  });
 
   test('Validate.type()', () => {
     expect(Validate.type({})).toBe('object');
@@ -154,6 +174,10 @@ describe('validator()', () => {
           bar: validator.test(/null/)
         }
       }
+    })).toBeTruthy();
+    expect(validator(obj, {
+      bar: validator.equals('hello'),
+      foo: validator.enums('123', 123)
     })).toBeTruthy();
   })
 

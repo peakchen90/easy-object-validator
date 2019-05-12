@@ -92,6 +92,14 @@ Validate.prototype = {
     return this;
   },
 
+  // 判断是否与指定的值相等
+  equals(value) {
+    this.$validRules.push(() => {
+      return this.value === value;
+    });
+    return this;
+  },
+
   // 将校验结果置反
   not() {
     this.$isOpposite = !this.$isOpposite;
@@ -122,6 +130,14 @@ Validate.prototype = {
     return this;
   },
 
+  // 判断是否是指定的值
+  enums(...values) {
+    this.$validRules.push(() => {
+      return values.includes(this.value);
+    });
+    return this;
+  },
+
   // 重置校验规则
   reset() {
     this.$validRules = [];
@@ -129,6 +145,6 @@ Validate.prototype = {
     this.$isRequire = false;
     return this;
   }
-}
+};
 
 module.exports = Validate;

@@ -89,9 +89,11 @@ validator.boolean = () => new Validate().boolean()
 validator.isRequire = () => new Validate().isRequire()
 validator.test = (regexp) => new Validate().test(regexp)
 validator.is = (typeName) => new Validate().is(typeName)
+validator.equals = (value) => new Validate().equals(value)
 validator.not = () => new Validate().not()
 validator.arrayOf = (validate) => new Validate().arrayOf(validate)
 validator.oneOf = (...validate) => new Validate().oneOf(...validate)
+validator.enums = (...values) => new Validate().enums(...values)
 validator.reset = () => new Validate().reset()
 
 

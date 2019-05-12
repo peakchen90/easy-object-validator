@@ -1,5 +1,5 @@
 /**
- * easy-object-valodator version 1.1.3 
+ * easy-object-valodator version 1.2.0 
  */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -122,6 +122,17 @@
     },
 
 
+    // 判断是否与指定的值相等
+    equals: function equals(value) {
+      var _this6 = this;
+
+      this.$validRules.push(function () {
+        return _this6.value === value;
+      });
+      return this;
+    },
+
+
     // 将校验结果置反
     not: function not() {
       this.$isOpposite = !this.$isOpposite;
@@ -131,13 +142,13 @@
 
     // 校验数组的元素
     arrayOf: function arrayOf(validate) {
-      var _this6 = this;
+      var _this7 = this;
 
       if (!(validate instanceof Validate)) {
         throw new TypeError('The parameter must be a instance of Validate');
       }
       this.$validRules.push(function () {
-        return type(_this6.value) === 'array' && _this6.value.every(function (item) {
+        return type(_this7.value) === 'array' && _this7.value.every(function (item) {
           return validate.doValidate(item);
         });
       });
@@ -158,6 +169,21 @@
         throw new TypeError('The parameter must be a instance of Validate');
       }
       this.$validRules.push(validators);
+      return this;
+    },
+
+
+    // 判断是否是指定的值
+    enums: function enums() {
+      var _this8 = this;
+
+      for (var _len2 = arguments.length, values = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        values[_key2] = arguments[_key2];
+      }
+
+      this.$validRules.push(function () {
+        return values.includes(_this8.value);
+      });
       return this;
     },
 
@@ -262,6 +288,9 @@
   validator.is = function (typeName) {
     return new Validate_1().is(typeName);
   };
+  validator.equals = function (value) {
+    return new Validate_1().equals(value);
+  };
   validator.not = function () {
     return new Validate_1().not();
   };
@@ -272,6 +301,11 @@
     var _ref;
 
     return (_ref = new Validate_1()).oneOf.apply(_ref, arguments);
+  };
+  validator.enums = function () {
+    var _ref2;
+
+    return (_ref2 = new Validate_1()).enums.apply(_ref2, arguments);
   };
   validator.reset = function () {
     return new Validate_1().reset();

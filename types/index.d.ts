@@ -25,11 +25,15 @@ declare namespace validator {
 
   function is(typeName: string): Validate;
 
+  function equals(value: any): Validate;
+
   function not(): Validate;
 
   function arrayOf(validate: Validate): Validate;
 
   function oneOf(...validates: Validate[]): Validate;
+
+  function enums(...values: any[]): Validate;
 
   function reset(): Validate;
 }

@@ -124,12 +124,17 @@ validate.doValidate('hello') // true
   - 校验值为指定的类型，调用 Object.prototype.toString 判断，类型名是全小写的 (如: string/number/object/null 等)
   - {String} typeName 类型名称
   - 返回 Validate 对象
+  
+#### 1.2.11 `validate.equals(value)`
+  - 校验是否与指定的值相等
+  - {*} value 指定的值
+  - 返回 Validate 对象
 
-#### 1.2.11 `validate.not()`
+#### 1.2.12 `validate.not()`
   - 将校验结果置反，可以多次使用
   - 返回 Validate 对象
 
-#### 1.2.12 `validate.arrayOf(validate)`
+#### 1.2.13 `validate.arrayOf(validate)`
   - 校验数组元素
   - {Validate} validate
   - 返回 Validate 对象
@@ -144,7 +149,7 @@ const v = new Validate().string()  // 等同于 const v = validator.string()
 validate.arrayOf(v).doValidate(['foo'])  // true
 ```
 
-#### 1.2.13 `validate.oneOf(...validator)`
+#### 1.2.14 `validate.oneOf(...validator)`
   - 校验规则能匹配到其中的一个就算校验成功
   - {Validate} validator 可以传多个Validate对象
   - 返回 Validate 对象
@@ -160,7 +165,12 @@ validate = new Validate()
 validate.oneOf(v1, v2).doValidate(123)  // true
 ```
 
-#### 1.2.14 `validate.reset()`
+#### 1.2.15 `validate.enums(...values)`
+  - 校验是否与指定的枚举值相等
+  - {*} values 多个枚举值
+  - 返回 Validate 对象
+  
+#### 1.2.16 `validate.reset()`
   - 将调用reset方法之前的校验规则重置，之后的校验规则不影响
   - 返回 Validate 对象
 
@@ -316,7 +326,7 @@ validator({
 
 
 #### **2.9. `validator.is` : Function(typeName)**
-  - 判断值的类型，用法与 [validate.is()](#19-validateistypename) 方法类似
+  - 判断值的类型，用法与 **validate.is()** 方法类似
   - {String} typeName 类型名（小写）
   - 返回 Validate 对象
 
@@ -330,7 +340,22 @@ validator({
 ```
 
 
-#### **2.10. `validator.not` : Function()**
+#### **2.10. `validator.equals` : Function(value)**
+  - 校验是否与指定的值相等
+  - {*} value 指定的值
+  - 返回 Validate 对象
+
+```js
+validator({
+  foo: 'foo'
+}, {
+  foo: validator.equals('foo')
+})
+// true
+```
+
+
+#### **2.11. `validator.not` : Function()**
   - 将校验结果置反
   - 返回 Validate 对象
 

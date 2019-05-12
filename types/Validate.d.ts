@@ -21,11 +21,15 @@ declare class Validate {
 
   is(typeName: string): Validate;
 
+  equals(value: any): Validate;
+
   not(): Validate;
 
   arrayOf(validate: Validate): Validate;
 
   oneOf(...validates: Validate[]): Validate;
+
+  enums(...values: any[]): Validate;
 
   reset(): Validate;
 }
