@@ -4,7 +4,7 @@ declare function validator(target: object, options: object): boolean;
 
 declare namespace validator {
   function extend(option: {
-    ruleName: (value) => boolean
+    ruleName: (value: any) => boolean
   }): void;
 
   function string(): Validate;

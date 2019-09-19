@@ -39,9 +39,16 @@ class Validate {
     return this;
   }
 
-  // 是一个普通对象
-  get object(): Validate {
-    return this.isType('object');
+  // 是一个布尔值
+  get boolean(): Validate {
+    this._rules.push(() => typeof this.value === 'boolean');
+    return this;
+  }
+
+  // 是一个Symbol
+  get symbol(): Validate {
+    this._rules.push(() => typeof this.value === 'symbol');
+    return this;
   }
 
   // 是一个数组
@@ -49,21 +56,14 @@ class Validate {
     return this.isType('array');
   }
 
-  // 是一个布尔值
-  get boolean(): Validate {
-    this._rules.push(() => typeof this.value === 'boolean');
-    return this;
+  // 是一个普通对象
+  get object(): Validate {
+    return this.isType('object');
   }
 
   // 是一个方法
   get func(): Validate {
     this._rules.push(() => typeof this.value === 'function');
-    return this;
-  }
-
-  // 是一个Symbol
-  get symbol(): Validate {
-    this._rules.push(() => typeof this.value === 'symbol');
     return this;
   }
 

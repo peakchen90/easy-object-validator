@@ -25,6 +25,7 @@ function getOutput(format, minify = false) {
   if (format === 'umd') output.name = name;
 
   output.sourcemap = true;
+  output.exports = 'named';
   output.banner = banner;
 
   return output;

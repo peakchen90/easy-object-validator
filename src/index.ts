@@ -7,7 +7,7 @@ import {defineGetter} from './utils';
  */
 function isReferenceType(val: any): boolean {
   const type = Validate.getType(val);
-  return type === 'object' || type === 'string';
+  return type === 'object' || type === 'array';
 }
 
 /**
@@ -16,7 +16,7 @@ function isReferenceType(val: any): boolean {
  * @param option 校验规则
  * @param _parent 保存父级已经遍历的引用
  */
-function validator(val: any, option: any, _parent: any[] = []): boolean {
+function _validator(val: any, option: any, _parent: any[] = []): boolean {
   if (option instanceof Validate) {
     return option.$validate(val);
   }
@@ -24,18 +24,17 @@ function validator(val: any, option: any, _parent: any[] = []): boolean {
   // 处理循环引用
   if (isReferenceType(option)) {
     if (_parent.includes(option)) {
-      throw new Error('The validation option has a circular reference');
+      throw new Error('The validate option has a circular reference');
     }
-  }
 
-  // 值为一个对象或数组
-  if (isReferenceType(val) && isReferenceType(option)) {
-    return Object.keys(option).every((key) => {
-      const value = val[key];
-      const validate = option[key];
-      _parent = _parent.concat(option);
-      return validator(value, validate, _parent);
-    });
+    // 值为一个对象或数组
+    if (isReferenceType(val)) {
+      return Object.keys(option).every((key) => {
+        const value = val[key];
+        const validate = option[key];
+        return _validator(value, validate, [..._parent, option]);
+      });
+    }
   }
 
   return false;
@@ -45,15 +44,17 @@ function validator(val: any, option: any, _parent: any[] = []): boolean {
  * 暴露方法
  */
 
-// 继承，用于自定义校验方法
+function validator(val: any, option: any): boolean {
+  return _validator(val, option);
+}
 
 defineGetter(validator, 'string', (): Validate => new Validate().string);
 defineGetter(validator, 'number', (): Validate => new Validate().number);
-defineGetter(validator, 'object', (): Validate => new Validate().object);
-defineGetter(validator, 'array', (): Validate => new Validate().array);
 defineGetter(validator, 'boolean', (): Validate => new Validate().boolean);
-defineGetter(validator, 'func', (): Validate => new Validate().func);
 defineGetter(validator, 'symbol', (): Validate => new Validate().symbol);
+defineGetter(validator, 'array', (): Validate => new Validate().array);
+defineGetter(validator, 'object', (): Validate => new Validate().object);
+defineGetter(validator, 'func', (): Validate => new Validate().func);
 defineGetter(validator, 'isEmpty', (): Validate => new Validate().isEmpty);
 defineGetter(validator, 'isRequired', (): Validate => new Validate().isRequired);
 defineGetter(validator, 'not', (): Validate => new Validate().not);
@@ -76,7 +77,7 @@ const reservedKey: string[] = [
 ];
 
 // 继承接口，用于实现自定义校验规则，或者覆写已有的规则
-defineGetter(validator, 'extend', () => (name: string, handler: () => boolean, isGetter: boolean = false) => {
+defineGetter(validator, 'extend', () => (name: string, handler: () => boolean, isGetter: boolean = false): void => {
   if (reservedKey.includes(name)) {
     throw new Error(`The extend keyword \`${name}\` is reserved keyword`);
   }
@@ -85,7 +86,7 @@ defineGetter(validator, 'extend', () => (name: string, handler: () => boolean, i
   }
 
   defineGetter(Validate.prototype, name, function getter() {
-    const fn = (...args: any[]) => {
+    const fn = (...args: any[]): Validate => {
       this._rules.push(() => handler.call(this, this.value, ...args));
       return this;
     };
@@ -105,7 +106,6 @@ defineGetter(validator, 'extend', () => (name: string, handler: () => boolean, i
     defineGetter(validator, name, () => (...args: any[]): Validate => new Validate()[name](...args));
   }
 });
-
 
 export default validator;
 export {Validate};
