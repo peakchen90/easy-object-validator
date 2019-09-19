@@ -4,6 +4,7 @@ import {defineGetter} from './utils';
 /**
  * 判断是否是引用类型（对象、数组）
  * @param val
+ * @ignore
  */
 function isReferenceType(val: any): boolean {
   const type = Validate.getType(val);
@@ -15,6 +16,7 @@ function isReferenceType(val: any): boolean {
  * @param val 校验的值
  * @param option 校验规则
  * @param _parent 保存父级已经遍历的引用
+ * @ignore
  */
 function _validator(val: any, option: any, _parent: any[] = []): boolean {
   if (option instanceof Validate) {
@@ -40,10 +42,13 @@ function _validator(val: any, option: any, _parent: any[] = []): boolean {
   return false;
 }
 
-/**
- * 暴露方法
- */
+// 暴露方法
 
+/**
+ * 校验方法
+ * @param val 校验的目标值
+ * @param option 校验规则option
+ */
 function validator(val: any, option: any): boolean {
   return _validator(val, option);
 }
@@ -68,7 +73,10 @@ defineGetter(validator, 'oneOf', () => (...validators: Validate[]): Validate => 
 defineGetter(validator, 'enums', () => (...values: any[]): Validate => new Validate().enums(...values));
 defineGetter(validator, 'reset', () => (): Validate => new Validate().reset());
 
-
+/**
+ * 保留字段
+ * @ignore
+ */
 const reservedKey: string[] = [
   'arguments', 'caller', 'length', 'prototype', 'apply', 'bind',
   'call', 'toString', 'toLocaleString', 'name', 'constructor',
@@ -76,7 +84,10 @@ const reservedKey: string[] = [
   'extend', '_rules', '_isOpposite', '_isRequired', '$validate'
 ];
 
-// 继承接口，用于实现自定义校验规则，或者覆写已有的规则
+/**
+ * 继承接口，用于实现自定义校验规则，或者覆写已有的规则
+ * @preferred
+ */
 defineGetter(validator, 'extend', () => (name: string, handler: () => boolean, isGetter: boolean = false): void => {
   if (reservedKey.includes(name)) {
     throw new Error(`The extend keyword \`${name}\` is reserved keyword`);

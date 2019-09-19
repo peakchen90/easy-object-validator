@@ -12,7 +12,8 @@
   ],
   "scripts": {
     "build": "rollup --config rollup.config.js",
-    "test": "jest"
+    "test": "jest",
+    "docs": "typedoc"
   },
   "keywords": [
     "objcet validator",
@@ -48,6 +49,7 @@
     "rollup-plugin-uglify": "^6.0.3",
     "ts-jest": "^24.1.0",
     "tslib": "^1.10.0",
+    "typedoc": "^0.15.0",
     "typescript": "^3.6.3"
   }
 }

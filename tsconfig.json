@@ -3,14 +3,21 @@
     "target": "ES5",
     "module": "commonjs",
     "noImplicitAny": true,
-    "sourceMap": true,
-    "declaration": true,
-    "declarationDir": "./types2/"
+    "sourceMap": true
   },
   "include": [
     "src/**/*"
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "typedocOptions": {
+    "mode": "file",
+    "out": "./docs",
+    "excludePrivate": true,
+    "excludeProtected": true,
+    "exclude": [
+      "node_modules/**/*"
+    ]
+  }
 }

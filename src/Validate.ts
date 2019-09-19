@@ -1,3 +1,6 @@
+/**
+ * @ignore
+ */
 type Rule = (value: any) => boolean;
 
 /**
@@ -10,7 +13,10 @@ class Validate {
 
   protected _isRequired: boolean;
 
-  // 返回数据类型
+  /**
+   * 返回数据类型
+   * @param value 目标值
+   */
   static getType(value: any): string {
     const str = Object.prototype.toString.call(value);
     return str.slice(0, -1).slice(8).toLowerCase();
@@ -24,72 +30,98 @@ class Validate {
     this.reset();
   }
 
-  // 是一个字符串
+  /**
+   * 判断是一个字符串类型
+   */
   get string(): Validate {
     this._rules.push((value: any) => typeof value === 'string');
     return this;
   }
 
-  // 是一个数字
+  /**
+   * 校验是一个数字类型
+   */
   get number(): Validate {
     this._rules.push((value: any) => typeof value === 'number');
     return this;
   }
 
-  // 是一个布尔值
+  /**
+   * 校验是一个布尔值类型
+   */
   get boolean(): Validate {
     this._rules.push((value: any) => typeof value === 'boolean');
     return this;
   }
 
-  // 是一个Symbol
+  /**
+   * 校验是一个Symbol类型
+   */
   get symbol(): Validate {
     this._rules.push((value: any) => typeof value === 'symbol');
     return this;
   }
 
-  // 是一个数组
+  /**
+   * 校验是一个数组类型
+   */
   get array(): Validate {
     return this.isType('array');
   }
 
-  // 是一个普通对象
+  /**
+   * 校验是一个普通对象类型
+   */
   get object(): Validate {
     return this.isType('object');
   }
 
-  // 是一个方法
+  /**
+   * 校验是一个方法
+   */
   get func(): Validate {
     this._rules.push((value: any) => typeof value === 'function');
     return this;
   }
 
-  // 是一个空值（null、undefined、空字符串）
+  /**
+   * 校验是一个空值 (null、undefined、空字符串)
+   */
   get isEmpty(): Validate {
     this._rules.push((value: any) => value == null || value === '');
     return this;
   }
 
-  // 必须
+  /**
+   * 是必须的
+   */
   get isRequired(): Validate {
     this._isRequired = true;
     this._rules.push((value: any) => value != null && value !== '');
     return this;
   }
 
-  // 将校验结果置反
+  /**
+   * 将校验结果置反
+   */
   get not(): Validate {
     this._isOpposite = !this._isOpposite;
     return this;
   }
 
-  // 校验长度
+  /**
+   * 校验长度
+   * @param len
+   */
   length(len: number): Validate {
     this._rules.push((value: any) => value && value.length === len);
     return this;
   }
 
-  // 正则校验
+  /**
+   * 校验是否与正则匹配
+   * @param regexp
+   */
   test(regexp: RegExp): Validate {
     if (Validate.getType(regexp) !== 'regexp') {
       throw new Error('regexp should be a Regexp.');
@@ -98,19 +130,28 @@ class Validate {
     return this;
   }
 
-  // 是什么类型
+  /**
+   * 校验类型
+   * @param type
+   */
   isType(type: string): Validate {
     this._rules.push((value: any) => Validate.getType(value) === type);
     return this;
   }
 
-  // 判断是否与指定的值相等
+  /**
+   * 校验是否与指定的值相等
+   * @param value
+   */
   equals(value: any): Validate {
     this._rules.push((_value: any) => _value === value);
     return this;
   }
 
-  // 校验数组的元素
+  /**
+   * 校验数组的元素
+   * @param validate
+   */
   arrayOf(validate: Validate): Validate {
     if (!(validate instanceof Validate)) {
       throw new TypeError('The parameter must be a instance of Validate');
@@ -122,7 +163,10 @@ class Validate {
     return this;
   }
 
-  // 多个校验规则，能匹配到一个就算匹配成功
+  /**
+   * 多个校验规则，能匹配到一个就算匹配成功
+   * @param validators
+   */
   oneOf(...validators: Validate[]): Validate {
     const valid = validators.every((validate) => validate instanceof Validate);
     if (!valid) {
@@ -134,7 +178,10 @@ class Validate {
     return this;
   }
 
-  // 判断是否是指定的值
+  /**
+   * 校验是否是指定的值
+   * @param values
+   */
   enums(...values: any[]): Validate {
     this._rules.push((value: any) => values.includes(value));
     return this;
@@ -142,7 +189,6 @@ class Validate {
 
   /**
    * 重置数据
-   * @private
    */
   reset(): Validate {
     this._rules = [];
