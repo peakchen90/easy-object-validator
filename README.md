@@ -60,7 +60,7 @@ validator(obj, {
 
 > validator 的校验规则基于 Validate 类
 
-[API参考](./docs/globals.html)
+[API参考](https://peakchen90.github.io/easy-object-validator/globals.html)
 
 ## 结语
 用得不爽就造轮子😶，欢迎提issues或PR
