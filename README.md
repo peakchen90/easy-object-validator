@@ -11,6 +11,8 @@
 
 > [更新日志](./CHANGELOG.md)
 
+当前文档版本是2.x，API不兼容1.x版本，点击查看[1.x文档](https://github.com/peakchen90/easy-object-validator/blob/1.x/README.md)
+
 ## Features
 - 支持 Node、浏览器端完美运行
 - 无任何依赖，代码压缩后仅3kb

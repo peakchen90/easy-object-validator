@@ -1,9 +1,9 @@
 {
   "name": "easy-object-validator",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "深度校验一个对象的属性值是否合法",
   "main": "dist/validator.js",
-  "module": "src/index.js",
+  "module": "dist/validator.cjs.js",
   "types": "types/index.d.ts",
   "files": [
     "types",
@@ -20,7 +20,8 @@
     "deep validate",
     "validator",
     "validate",
-    "validation"
+    "validation",
+    "typescript"
   ],
   "repository": {
     "type": "git",
@@ -29,18 +30,24 @@
   "bugs": {
     "url": "https://github.com/peakchen90/easy-object-validator/issues"
   },
-  "author": "peakchen90 <1558267774@qq.com>",
+  "author": "peakchen90<1558267774@qq.com>",
   "license": "MIT",
   "devDependencies": {
-    "babel-preset-env": "^1.7.0",
-    "jest": "^23.5.0",
-    "rollup": "^0.65.0",
-    "rollup-plugin-babel": "^3.0.7",
-    "rollup-plugin-commonjs": "^9.1.6",
-    "rollup-plugin-uglify": "^4.0.0"
-  },
-  "jest": {
-    "coverageDirectory": "./test/coverage/",
-    "collectCoverage": true
+    "@babel/core": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
+    "@types/jest": "^24.0.18",
+    "@typescript-eslint/eslint-plugin": "^2.3.0",
+    "@typescript-eslint/parser": "^2.3.0",
+    "eslint": "^6.4.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "jest": "^24.9.0",
+    "rollup": "^1.21.4",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-typescript": "^1.0.1",
+    "rollup-plugin-uglify": "^6.0.3",
+    "ts-jest": "^24.1.0",
+    "tslib": "^1.10.0",
+    "typescript": "^3.6.3"
   }
 }
