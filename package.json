@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "description": "深度校验一个对象的属性值是否合法",
   "main": "dist/validator.js",
-  "module": "dist/validator.cjs.js",
+  "module": "dist/validator.esm.js",
   "types": "types/index.d.ts",
   "files": [
     "types",

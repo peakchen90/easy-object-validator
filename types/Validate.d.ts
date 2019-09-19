@@ -1,29 +1,35 @@
 declare class Validate {
-  static type(): string;
+  static getType(): string;
 
-  doValidate(value: any): boolean;
+  constructor();
 
-  string(): Validate;
+  get string(): Validate;
 
-  number(): Validate;
+  get number(): Validate;
 
-  object(): Validate;
+  get boolean(): Validate;
 
-  array(): Validate;
+  get symbol(): Validate;
 
-  boolean(): Validate;
+  get array(): Validate;
 
-  isRequire(): Validate;
+  get object(): Validate;
 
-  length(length: number): Validate;
+  get func(): Validate;
+
+  get isEmpty(): Validate;
+
+  get isRequired(): Validate;
+
+  get not(): Validate;
+
+  length(len: number): Validate;
 
   test(regexp: RegExp): Validate;
 
-  is(typeName: string): Validate;
+  isType(type: string): Validate;
 
   equals(value: any): Validate;
-
-  not(): Validate;
 
   arrayOf(validate: Validate): Validate;
 
@@ -32,6 +38,8 @@ declare class Validate {
   enums(...values: any[]): Validate;
 
   reset(): Validate;
+
+  $validate(value: any): void
 }
 
 export default Validate;

@@ -1,33 +1,35 @@
 import Validate from './Validate';
 
-declare function validator(target: object, options: object): boolean;
+declare function validator(val: any, option: any): boolean;
 
 declare namespace validator {
-  function extend(option: {
-    ruleName: (value: any) => boolean
-  }): void;
+  const string: Validate;
 
-  function string(): Validate;
+  const number: Validate;
 
-  function number(): Validate;
+  const boolean: Validate;
 
-  function object(): Validate;
+  const symbol: Validate;
 
-  function array(): Validate;
+  const array: Validate;
 
-  function boolean(): Validate;
+  const object: Validate;
 
-  function isRequire(): Validate;
+  const func: Validate;
 
-  function length(length: number): Validate;
+  const isEmpty: Validate;
+
+  const isRequired: Validate;
+
+  const not: Validate;
+
+  function length(len: number): Validate;
 
   function test(regexp: RegExp): Validate;
 
-  function is(typeName: string): Validate;
+  function isType(type: string): Validate;
 
   function equals(value: any): Validate;
-
-  function not(): Validate;
 
   function arrayOf(validate: Validate): Validate;
 
@@ -36,6 +38,8 @@ declare namespace validator {
   function enums(...values: any[]): Validate;
 
   function reset(): Validate;
+
+  function extend(name: string, handler: () => boolean, isGetter?: boolean): void;
 }
 
 export default validator;

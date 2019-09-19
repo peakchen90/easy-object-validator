@@ -110,7 +110,7 @@ describe('validator', () => {
       'arguments', 'caller', 'length', 'prototype', 'apply', 'bind',
       'call', 'toString', 'toLocaleString', 'name', 'constructor',
       'isPrototypeOf', 'propertyIsEnumerable', 'valueOf', 'hasOwnProperty',
-      'extend', '_rules', '_isOpposite', '_isRequired', 'value'
+      'extend', '_rules', '_isOpposite', '_isRequired', '$validate'
     ].forEach((keyword) => {
       expect(() => validator.extend(keyword, jest.fn())).toThrowError(/is reserved keyword/);
       expect(() => validator.extend('a')).toThrowError();

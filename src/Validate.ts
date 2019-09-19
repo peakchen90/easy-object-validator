@@ -1,17 +1,14 @@
-type Rule = () => boolean;
-type Rules = Validate[];
+type Rule = (value: any) => boolean;
 
 /**
  * 校验类
  */
 class Validate {
-  private _rules: Array<Rule | Rules>;
+  protected _rules: Rule[];
 
-  private _isOpposite: boolean;
+  protected _isOpposite: boolean;
 
-  private _isRequired: boolean;
-
-  protected value: any;
+  protected _isRequired: boolean;
 
   // 返回数据类型
   static getType(value: any): string {
@@ -29,25 +26,25 @@ class Validate {
 
   // 是一个字符串
   get string(): Validate {
-    this._rules.push(() => typeof this.value === 'string');
+    this._rules.push((value: any) => typeof value === 'string');
     return this;
   }
 
   // 是一个数字
   get number(): Validate {
-    this._rules.push(() => typeof this.value === 'number');
+    this._rules.push((value: any) => typeof value === 'number');
     return this;
   }
 
   // 是一个布尔值
   get boolean(): Validate {
-    this._rules.push(() => typeof this.value === 'boolean');
+    this._rules.push((value: any) => typeof value === 'boolean');
     return this;
   }
 
   // 是一个Symbol
   get symbol(): Validate {
-    this._rules.push(() => typeof this.value === 'symbol');
+    this._rules.push((value: any) => typeof value === 'symbol');
     return this;
   }
 
@@ -63,20 +60,20 @@ class Validate {
 
   // 是一个方法
   get func(): Validate {
-    this._rules.push(() => typeof this.value === 'function');
+    this._rules.push((value: any) => typeof value === 'function');
     return this;
   }
 
   // 是一个空值（null、undefined、空字符串）
   get isEmpty(): Validate {
-    this._rules.push(() => this.value == null || this.value === '');
+    this._rules.push((value: any) => value == null || value === '');
     return this;
   }
 
   // 必须
   get isRequired(): Validate {
     this._isRequired = true;
-    this._rules.push(() => this.value != null && this.value !== '');
+    this._rules.push((value: any) => value != null && value !== '');
     return this;
   }
 
@@ -88,7 +85,7 @@ class Validate {
 
   // 校验长度
   length(len: number): Validate {
-    this._rules.push(() => this.value && this.value.length === len);
+    this._rules.push((value: any) => value && value.length === len);
     return this;
   }
 
@@ -97,19 +94,19 @@ class Validate {
     if (Validate.getType(regexp) !== 'regexp') {
       throw new Error('regexp should be a Regexp.');
     }
-    this._rules.push(() => regexp.test(this.value));
+    this._rules.push((value: any) => regexp.test(value));
     return this;
   }
 
   // 是什么类型
   isType(type: string): Validate {
-    this._rules.push(() => Validate.getType(this.value) === type);
+    this._rules.push((value: any) => Validate.getType(value) === type);
     return this;
   }
 
   // 判断是否与指定的值相等
   equals(value: any): Validate {
-    this._rules.push(() => this.value === value);
+    this._rules.push((_value: any) => _value === value);
     return this;
   }
 
@@ -118,8 +115,10 @@ class Validate {
     if (!(validate instanceof Validate)) {
       throw new TypeError('The parameter must be a instance of Validate');
     }
-    this._rules.push(() => Validate.getType(this.value) === 'array'
-      && this.value.every((val: any) => validate.$validate(val)));
+    this._rules.push((value: any) => {
+      return Validate.getType(value) === 'array'
+        && value.every((val: any) => validate.$validate(val));
+    });
     return this;
   }
 
@@ -129,13 +128,15 @@ class Validate {
     if (!valid) {
       throw new TypeError('The parameter must be a instance of Validate');
     }
-    this._rules.push(validators);
+    this._rules.push((value: any) => {
+      return validators.some((validate: Validate) => validate.$validate(value));
+    });
     return this;
   }
 
   // 判断是否是指定的值
   enums(...values: any[]): Validate {
-    this._rules.push(() => values.includes(this.value));
+    this._rules.push((value: any) => values.includes(value));
     return this;
   }
 
@@ -155,17 +156,11 @@ class Validate {
    * @param value
    */
   $validate(value: any): boolean {
-    this.value = value;
-
-    const result = this._rules.every((rule) => {
-      if (Validate.getType(rule) === 'array') {
-        return (rule as Rules).some((validate: Validate): boolean => validate.$validate(value));
-      }
-
-      if (!this._isRequired && (this.value == null || this.value === '')) {
+    const result = this._rules.every((rule: Rule) => {
+      if (!this._isRequired && (value == null || value === '')) {
         return true;
       }
-      return (rule as Rule)();
+      return rule(value);
     });
     return this._isOpposite ? !result : result;
   }

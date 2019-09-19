@@ -73,7 +73,7 @@ const reservedKey: string[] = [
   'arguments', 'caller', 'length', 'prototype', 'apply', 'bind',
   'call', 'toString', 'toLocaleString', 'name', 'constructor',
   'isPrototypeOf', 'propertyIsEnumerable', 'valueOf', 'hasOwnProperty',
-  'extend', '_rules', '_isOpposite', '_isRequired', 'value'
+  'extend', '_rules', '_isOpposite', '_isRequired', '$validate'
 ];
 
 // 继承接口，用于实现自定义校验规则，或者覆写已有的规则
@@ -87,7 +87,7 @@ defineGetter(validator, 'extend', () => (name: string, handler: () => boolean, i
 
   defineGetter(Validate.prototype, name, function getter() {
     const fn = (...args: any[]): Validate => {
-      this._rules.push(() => handler.call(this, this.value, ...args));
+      this._rules.push((value: any) => handler.call(this, value, ...args));
       return this;
     };
 
@@ -108,4 +108,3 @@ defineGetter(validator, 'extend', () => (name: string, handler: () => boolean, i
 });
 
 export default validator;
-export {Validate};

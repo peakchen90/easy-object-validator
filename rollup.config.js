@@ -24,7 +24,6 @@ function getOutput(format, minify = false) {
   output.format = format;
   output.name = name;
   output.sourcemap = true;
-  output.exports = 'named';
   output.banner = banner;
 
   return output;
