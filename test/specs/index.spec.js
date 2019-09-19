@@ -1,4 +1,4 @@
-const validator = require('../../src').default();
+const validator = require('../../src').default;
 
 describe('validator', () => {
   const obj = {

@@ -22,8 +22,7 @@ function getOutput(format, minify = false) {
 
   output.file = 'dist/' + file + '.js';
   output.format = format;
-  if (format === 'umd') output.name = name;
-
+  output.name = name;
   output.sourcemap = true;
   output.exports = 'named';
   output.banner = banner;

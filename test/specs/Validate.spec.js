@@ -1,4 +1,4 @@
-const { default: Validate } = require('../../src/Validate');
+const Validate = require('../../src/Validate').default;
 
 describe('Validate', () => {
   let validate;
