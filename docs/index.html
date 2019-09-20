@@ -53,7 +53,7 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="globals.html">Globals</a>
+					<a href="index.html">Globals</a>
 				</li>
 			</ul>
 			<h1> easy-object-validator</h1>
@@ -63,422 +63,71 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<div class="tsd-panel tsd-typography">
-				<a href="#easy-object-validator" id="easy-object-validator" style="color: inherit; text-decoration: none;">
-					<h1>easy-object-validator</h1>
-				</a>
-				<p>深度校验一个对象的属性值是否合法</p>
-				<p><a href="https://travis-ci.org/peakchen90/easy-object-validator"><img src="https://img.shields.io/travis/peakchen90/easy-object-validator/master.svg" alt="Travis (.org) branch"></a>
-					<a href="https://codecov.io/gh/peakchen90/easy-object-validator"><img src="https://img.shields.io/codecov/c/github/peakchen90/easy-object-validator.svg" alt="Codecov"></a>
-					<a href="https://www.npmjs.com/package/easy-object-validator"><img src="https://img.shields.io/npm/v/easy-object-validator.svg" alt="npm"></a>
-					<a href="https://www.npmjs.com/package/easy-object-validator"><img src="https://img.shields.io/npm/dt/easy-object-validator.svg" alt="npm"></a>
-				<a href="https://github.com/peakchen90/easy-object-validator/blob/master/LICENSE"><img src="https://img.shields.io/github/license/mashape/apistatus.svg" alt="GitHub"></a></p>
-				<blockquote>
-					<p><a href="./CHANGELOG.md">更新日志</a></p>
-				</blockquote>
-				<p>当前文档版本是2.x，API不兼容1.x版本，点击查看<a href="https://github.com/peakchen90/easy-object-validator/blob/1.x/README.md">1.x文档</a></p>
-				<a href="#features" id="features" style="color: inherit; text-decoration: none;">
-					<h2>Features</h2>
-				</a>
-				<ul>
-					<li>支持 Node、浏览器端完美运行</li>
-					<li>无任何依赖，代码压缩后仅3kb</li>
-					<li>支持深度对象校验，提供的API友好、易用</li>
-					<li>支持校验方法扩展</li>
-				</ul>
-				<a href="#安装" id="安装" style="color: inherit; text-decoration: none;">
-					<h2>安装</h2>
-				</a>
-				<pre><code class="language-bash">npm i -S easy-object-validator
-
-<span class="hljs-comment"># 构建</span>
-npm run build
-<span class="hljs-comment"># 单元测试</span>
-npm run <span class="hljs-built_in">test</span></code></pre>
-				<a href="#快速开始" id="快速开始" style="color: inherit; text-decoration: none;">
-					<h2>快速开始</h2>
-				</a>
-				<pre><code class="language-js"><span class="hljs-keyword">import</span> validator <span class="hljs-keyword">from</span> <span class="hljs-string">'easy-object-validator'</span>
-
-<span class="hljs-keyword">const</span> obj = {
-  <span class="hljs-attr">foo</span>: <span class="hljs-number">123</span>,
-  <span class="hljs-attr">bar</span>: <span class="hljs-string">'hello'</span>,
-  <span class="hljs-attr">child</span>: {
-    <span class="hljs-attr">foo</span>: <span class="hljs-literal">true</span>,
-    <span class="hljs-attr">bar</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>],
-    <span class="hljs-attr">child</span>: {
-      <span class="hljs-attr">bar</span>: <span class="hljs-literal">null</span>
-    }
-  }
-}
-validator(obj, {
-  <span class="hljs-attr">foo</span>: validator.test(<span class="hljs-regexp">/^\d+$/</span>),
-  <span class="hljs-attr">bar</span>: validator.string().length(<span class="hljs-number">5</span>),
-  <span class="hljs-attr">child</span>: {
-    <span class="hljs-attr">foo</span>: validator.boolean().isRequire(),
-    <span class="hljs-attr">bar</span>: validator.array().length(<span class="hljs-number">4</span>),
-    <span class="hljs-attr">child</span>: validator.object()
-  }
-})
-<span class="hljs-comment">// true</span></code></pre>
-				<a href="#api" id="api" style="color: inherit; text-decoration: none;">
-					<h2>API</h2>
-				</a>
-				<blockquote>
-					<p>validator 的校验规则基于 Validate 类，下面先介绍 Validate 类</p>
-				</blockquote>
-				<a href="#strong1-codevalidatecode--classstrong" id="strong1-codevalidatecode--classstrong" style="color: inherit; text-decoration: none;">
-					<h3><strong>1. <code>Validate</code> : class</strong></h3>
-				</a>
-				<ul>
-					<li>提供校验方法，以及校验方法的扩展</li>
-				</ul>
-				<pre><code class="language-js"><span class="hljs-keyword">import</span> Validate <span class="hljs-keyword">from</span> <span class="hljs-string">'easy-object-validator/src/Validate'</span>
-
-<span class="hljs-keyword">const</span> validate = <span class="hljs-keyword">new</span> Validate();
-
-<span class="hljs-comment">// 校验方法都返回当前 Validate 对象，可以连缀调用</span>
-<span class="hljs-comment">// 这个过程不会执行校验动作</span>
-validate.string().length(<span class="hljs-number">5</span>).isRequire()
-<span class="hljs-comment">// 执行校验</span>
-validate.doValidate(<span class="hljs-string">'hello'</span>) <span class="hljs-comment">// true</span></code></pre>
-				<blockquote>
-					<p>1.1 实例属性：</p>
-				</blockquote>
-				<a href="#111-codevalidatevaluecode" id="111-codevalidatevaluecode" style="color: inherit; text-decoration: none;">
-					<h4>1.1.1 <code>validate.value</code></h4>
-				</a>
-				<ul>
-					<li>校验的值，可以通过实例方法 validate.doValidate(value) 传参设值</li>
-					<li>{any}</li>
-				</ul>
-				<blockquote>
-					<p>1.2 实例方法：</p>
-				</blockquote>
-				<a href="#121-codevalidatedovalidatevaluecode" id="121-codevalidatedovalidatevaluecode" style="color: inherit; text-decoration: none;">
-					<h4>1.2.1 <code>validate.doValidate(value)</code></h4>
-				</a>
-				<ul>
-					<li>执行校验方法</li>
-					<li>{any} value 执行校验的值</li>
-					<li>返回 undefined</li>
-				</ul>
-				<a href="#122-codevalidatestringcode" id="122-codevalidatestringcode" style="color: inherit; text-decoration: none;">
-					<h4>1.2.2 <code>validate.string()</code></h4>
-				</a>
-				<ul>
-					<li>校验字符串</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<a href="#123-codevalidatenumbercode" id="123-codevalidatenumbercode" style="color: inherit; text-decoration: none;">
-					<h4>1.2.3 <code>validate.number()</code></h4>
-				</a>
-				<ul>
-					<li>校验数字</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<a href="#124-codevalidateobjectcode" id="124-codevalidateobjectcode" style="color: inherit; text-decoration: none;">
-					<h4>1.2.4 <code>validate.object()</code></h4>
-				</a>
-				<ul>
-					<li>校验数组</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<a href="#125-codevalidatearraycode" id="125-codevalidatearraycode" style="color: inherit; text-decoration: none;">
-					<h4>1.2.5 <code>validate.array()</code></h4>
-				</a>
-				<ul>
-					<li>校验数字</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<a href="#126-codevalidatebooleancode" id="126-codevalidatebooleancode" style="color: inherit; text-decoration: none;">
-					<h4>1.2.6 <code>validate.boolean()</code></h4>
-				</a>
-				<ul>
-					<li>校验布尔值</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<a href="#127-codevalidateisrequirecode" id="127-codevalidateisrequirecode" style="color: inherit; text-decoration: none;">
-					<h4>1.2.7 <code>validate.isRequire()</code></h4>
-				</a>
-				<ul>
-					<li>校验值不为空 (null/undefined/空字符串)</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<a href="#128-codevalidatelengthlencode" id="128-codevalidatelengthlencode" style="color: inherit; text-decoration: none;">
-					<h4>1.2.8 <code>validate.length(len)</code></h4>
-				</a>
-				<ul>
-					<li>校验长度 (仅支持有length属性的值，如字符串，数组，方法 等)</li>
-					<li>{Number} len 期望的长度值</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<a href="#129-codevalidatetestregexpcode" id="129-codevalidatetestregexpcode" style="color: inherit; text-decoration: none;">
-					<h4>1.2.9 <code>validate.test(regexp)</code></h4>
-				</a>
-				<ul>
-					<li>正则校验</li>
-					<li>{RegExp} regepx 校验的正则表达式</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<a href="#1210-codevalidateistypenamecode" id="1210-codevalidateistypenamecode" style="color: inherit; text-decoration: none;">
-					<h4>1.2.10 <code>validate.is(typeName)</code></h4>
-				</a>
-				<ul>
-					<li>校验值为指定的类型，调用 Object.prototype.toString 判断，类型名是全小写的 (如: string/number/object/null 等)</li>
-					<li>{String} typeName 类型名称</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<a href="#1211-codevalidateequalsvaluecode" id="1211-codevalidateequalsvaluecode" style="color: inherit; text-decoration: none;">
-					<h4>1.2.11 <code>validate.equals(value)</code></h4>
-				</a>
-				<ul>
-					<li>校验是否与指定的值相等</li>
-					<li>{*} value 指定的值</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<a href="#1212-codevalidatenotcode" id="1212-codevalidatenotcode" style="color: inherit; text-decoration: none;">
-					<h4>1.2.12 <code>validate.not()</code></h4>
-				</a>
-				<ul>
-					<li>将校验结果置反，可以多次使用</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<a href="#1213-codevalidatearrayofvalidatecode" id="1213-codevalidatearrayofvalidatecode" style="color: inherit; text-decoration: none;">
-					<h4>1.2.13 <code>validate.arrayOf(validate)</code></h4>
-				</a>
-				<ul>
-					<li>校验数组元素</li>
-					<li>{Validate} validate</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<pre><code class="language-js"><span class="hljs-keyword">const</span> validate = <span class="hljs-keyword">new</span> Validate()
-
-<span class="hljs-comment">// 创建一个新的Validate对象，避免污染</span>
-<span class="hljs-comment">// 可以通过validator上方法快速创建Validate对象</span>
-<span class="hljs-keyword">const</span> v = <span class="hljs-keyword">new</span> Validate().string()  <span class="hljs-comment">// 等同于 const v = validator.string()</span>
-
-validate.arrayOf(v).doValidate([<span class="hljs-string">'foo'</span>])  <span class="hljs-comment">// true</span></code></pre>
-				<a href="#1214-codevalidateoneofvalidatorcode" id="1214-codevalidateoneofvalidatorcode" style="color: inherit; text-decoration: none;">
-					<h4>1.2.14 <code>validate.oneOf(...validator)</code></h4>
-				</a>
-				<ul>
-					<li>校验规则能匹配到其中的一个就算校验成功</li>
-					<li>{Validate} validator 可以传多个Validate对象</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<pre><code class="language-js"><span class="hljs-keyword">let</span> validate = <span class="hljs-keyword">new</span> Validate()
-<span class="hljs-comment">// 创建一个新的Validate对象，避免污染</span>
-<span class="hljs-keyword">const</span> v1 = <span class="hljs-keyword">new</span> Validate().string()
-<span class="hljs-keyword">const</span> v2 = <span class="hljs-keyword">new</span> Validate().number()
-validate.oneOf(v1, v2).doValidate(<span class="hljs-string">'foo'</span>)  <span class="hljs-comment">// true</span>
-
-validate = <span class="hljs-keyword">new</span> Validate()
-validate.oneOf(v1, v2).doValidate(<span class="hljs-number">123</span>)  <span class="hljs-comment">// true</span></code></pre>
-				<a href="#1215-codevalidateenumsvaluescode" id="1215-codevalidateenumsvaluescode" style="color: inherit; text-decoration: none;">
-					<h4>1.2.15 <code>validate.enums(...values)</code></h4>
-				</a>
-				<ul>
-					<li>校验是否与指定的枚举值相等</li>
-					<li>{*} values 多个枚举值</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<a href="#1216-codevalidateresetcode" id="1216-codevalidateresetcode" style="color: inherit; text-decoration: none;">
-					<h4>1.2.16 <code>validate.reset()</code></h4>
-				</a>
-				<ul>
-					<li>将调用reset方法之前的校验规则重置，之后的校验规则不影响</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<pre><code class="language-js"><span class="hljs-keyword">let</span> validate = <span class="hljs-keyword">new</span> Validate()
-validate.string().doValidate(<span class="hljs-string">'foo'</span>)  <span class="hljs-comment">// true</span>
-validate.number().doValidate(<span class="hljs-number">123</span>)  <span class="hljs-comment">// false</span>
-
-<span class="hljs-comment">// reset</span>
-validate = <span class="hljs-keyword">new</span> Validate()
-validate.string().doValidate(<span class="hljs-string">'foo'</span>)  <span class="hljs-comment">// true</span>
-validate.reset().number().doValidate(<span class="hljs-number">123</span>)  <span class="hljs-comment">// true</span></code></pre>
-				<a href="#strong2-codevalidatorcode--functionobject-optionsstrong" id="strong2-codevalidatorcode--functionobject-optionsstrong" style="color: inherit; text-decoration: none;">
-					<h3><strong>2. <code>validator</code> : Function(object, options)</strong></h3>
-				</a>
-				<ul>
-					<li>校验对象</li>
-					<li>{Object} <code>object</code> : [必选] 校验的目标对象</li>
-					<li>{Object} <code>options</code> : [必选] 校验规则</li>
-					<li>返回 Boolean</li>
-				</ul>
-				<pre><code class="language-js">validator({
-  <span class="hljs-attr">foo</span>: <span class="hljs-string">'hello'</span>
-}, {
-  <span class="hljs-attr">foo</span>: validator.string()
-})
-<span class="hljs-comment">// true</span></code></pre>
-				<a href="#strong21-codevalidatorextendcode--functionoptionsstrong" id="strong21-codevalidatorextendcode--functionoptionsstrong" style="color: inherit; text-decoration: none;">
-					<h4><strong>2.1. <code>validator.extend</code> : Function(options)</strong></h4>
-				</a>
-				<ul>
-					<li>用于扩展校验方法，扩展之后永久有效，不用每次重新执行此方法</li>
-					<li>{Object} <code>options</code> : 校验方法对象，对象的属性将作为方法名，对象的属性值是一个方法，用于自定义校验</li>
-					<li>返回 undefined</li>
-				</ul>
-				<pre><code class="language-js"><span class="hljs-comment">// 调用 .extend 方法后，将在 Validate 类的原型上定义校验方法，</span>
-<span class="hljs-comment">// 同时绑定到 validator 上，调用 validator[validateName] 返回 Validate 对象</span>
-<span class="hljs-comment">// 校验方法接收一个参数，为校验的值</span>
-validator.extend({
-  isName(value) {
-    <span class="hljs-keyword">return</span> <span class="hljs-regexp">/^[A-Z][A-z]*$/</span>.test(value)
-  }
-})
-validator({
-  <span class="hljs-attr">foo</span>: <span class="hljs-string">'Alice'</span>
-}, {
-  <span class="hljs-attr">foo</span>: validator.isName().string()
-})
-<span class="hljs-comment">// true</span></code></pre>
-				<a href="#strong22-codevalidatorstringcode--functionstrong" id="strong22-codevalidatorstringcode--functionstrong" style="color: inherit; text-decoration: none;">
-					<h4><strong>2.2. <code>validator.string</code> : Function()</strong></h4>
-				</a>
-				<ul>
-					<li>判断是否是一个字符串</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<pre><code class="language-js">validator({
-  <span class="hljs-attr">foo</span>: <span class="hljs-string">'Bob'</span>
-}, {
-  <span class="hljs-attr">foo</span>: validator.string()
-})
-<span class="hljs-comment">// true</span></code></pre>
-				<a href="#strong23-codevalidatornumbercode--functionstrong" id="strong23-codevalidatornumbercode--functionstrong" style="color: inherit; text-decoration: none;">
-					<h4><strong>2.3. <code>validator.number</code> : Function()</strong></h4>
-				</a>
-				<ul>
-					<li>判断是否是一个数字</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<pre><code class="language-js">validator({
-  <span class="hljs-attr">foo</span>: <span class="hljs-number">123</span>
-}, {
-  <span class="hljs-attr">foo</span>: validator.number()
-})
-<span class="hljs-comment">// true</span></code></pre>
-				<a href="#strong24-codevalidatorobjectcode--functionstrong" id="strong24-codevalidatorobjectcode--functionstrong" style="color: inherit; text-decoration: none;">
-					<h4><strong>2.4. <code>validator.object</code> : Function()</strong></h4>
-				</a>
-				<ul>
-					<li>判断是否是一个普通对象</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<pre><code class="language-js">validator({
-  <span class="hljs-attr">foo</span>: {}
-}, {
-  <span class="hljs-attr">foo</span>: validator.object()
-})
-<span class="hljs-comment">// true</span></code></pre>
-				<a href="#strong25-codevalidatorarraycode--functionstrong" id="strong25-codevalidatorarraycode--functionstrong" style="color: inherit; text-decoration: none;">
-					<h4><strong>2.5. <code>validator.array</code> : Function()</strong></h4>
-				</a>
-				<ul>
-					<li>判断是否是一个数组</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<pre><code class="language-js">validator({
-  <span class="hljs-attr">foo</span>: []
-}, {
-  <span class="hljs-attr">foo</span>: validator.array()
-})
-<span class="hljs-comment">// true</span></code></pre>
-				<a href="#strong26-codevalidatorbooleancode--functionstrong" id="strong26-codevalidatorbooleancode--functionstrong" style="color: inherit; text-decoration: none;">
-					<h4><strong>2.6. <code>validator.boolean</code> : Function()</strong></h4>
-				</a>
-				<ul>
-					<li>判断是否是一个布尔值</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<pre><code class="language-js">validator({
-  <span class="hljs-attr">foo</span>: <span class="hljs-literal">true</span>
-}, {
-  <span class="hljs-attr">foo</span>: validator.boolean()
-})
-<span class="hljs-comment">// true</span></code></pre>
-				<a href="#strong27-codevalidatorisrequirecode--functionstrong" id="strong27-codevalidatorisrequirecode--functionstrong" style="color: inherit; text-decoration: none;">
-					<h4><strong>2.7. <code>validator.isRequire</code> : Function()</strong></h4>
-				</a>
-				<ul>
-					<li>判断值不为空（null、undefined、空字符串）</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<pre><code class="language-js">validator({
-  <span class="hljs-attr">foo</span>: <span class="hljs-string">'hello'</span>
-}, {
-  <span class="hljs-attr">foo</span>: validator.isRequire()
-})
-<span class="hljs-comment">// true</span></code></pre>
-				<a href="#strong28-codevalidatortestcode--functionregexpstrong" id="strong28-codevalidatortestcode--functionregexpstrong" style="color: inherit; text-decoration: none;">
-					<h4><strong>2.8. <code>validator.test</code> : Function(regexp)</strong></h4>
-				</a>
-				<ul>
-					<li>通过正则表达式判断值是否匹配</li>
-					<li>{RegExp} regexp 正则表达式</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<pre><code class="language-js">validator({
-  <span class="hljs-attr">foo</span>: <span class="hljs-string">'123@bar.com'</span>
-}, {
-  <span class="hljs-attr">foo</span>: validator.test(<span class="hljs-regexp">/\w+@\w+\.com/</span>)
-})
-<span class="hljs-comment">// true</span></code></pre>
-				<a href="#strong29-codevalidatoriscode--functiontypenamestrong" id="strong29-codevalidatoriscode--functiontypenamestrong" style="color: inherit; text-decoration: none;">
-					<h4><strong>2.9. <code>validator.is</code> : Function(typeName)</strong></h4>
-				</a>
-				<ul>
-					<li>判断值的类型，用法与 <strong>validate.is()</strong> 方法类似</li>
-					<li>{String} typeName 类型名（小写）</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<pre><code class="language-js">validator({
-  <span class="hljs-attr">foo</span>: []
-}, {
-  <span class="hljs-attr">foo</span>: validator.is(<span class="hljs-string">'array'</span>)
-})
-<span class="hljs-comment">// true</span></code></pre>
-				<a href="#strong210-codevalidatorequalscode--functionvaluestrong" id="strong210-codevalidatorequalscode--functionvaluestrong" style="color: inherit; text-decoration: none;">
-					<h4><strong>2.10. <code>validator.equals</code> : Function(value)</strong></h4>
-				</a>
-				<ul>
-					<li>校验是否与指定的值相等</li>
-					<li>{*} value 指定的值</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<pre><code class="language-js">validator({
-  <span class="hljs-attr">foo</span>: <span class="hljs-string">'foo'</span>
-}, {
-  <span class="hljs-attr">foo</span>: validator.equals(<span class="hljs-string">'foo'</span>)
-})
-<span class="hljs-comment">// true</span></code></pre>
-				<a href="#strong211-codevalidatornotcode--functionstrong" id="strong211-codevalidatornotcode--functionstrong" style="color: inherit; text-decoration: none;">
-					<h4><strong>2.11. <code>validator.not</code> : Function()</strong></h4>
-				</a>
-				<ul>
-					<li>将校验结果置反</li>
-					<li>返回 Validate 对象</li>
-				</ul>
-				<pre><code class="language-js">validator({
-  <span class="hljs-attr">foo</span>: <span class="hljs-number">123</span>
-}, {
-  <span class="hljs-attr">foo</span>: validator.not().string()
-})
-<span class="hljs-comment">// true</span></code></pre>
-				<a href="#结语" id="结语" style="color: inherit; text-decoration: none;">
-					<h2>结语</h2>
-				</a>
-				<p>用得不爽就造轮子😶，欢迎提issues或PR</p>
-			</div>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Classes</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-class"><a href="classes/validate.html" class="tsd-kind-icon">Validate</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function"><a href="index.html#validator" class="tsd-kind-icon">validator</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="validator" class="tsd-anchor"></a>
+					<h3>validator</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">validator<span class="tsd-signature-symbol">(</span>val<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, option<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/peakchen90/easy-object-validator/blob/5210469/src/index.ts#L52">index.ts:52</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>校验方法</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>val: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>校验的目标值</p>
+									</div>
+								</li>
+								<li>
+									<h5>option: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>校验规则option</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
-					<li class="globals  ">
-						<a href="globals.html"><em>Globals</em></a>
+					<li class="globals current ">
+						<a href="index.html"><em>Globals</em></a>
 					</li>
 				</ul>
 			</nav>
@@ -488,7 +137,7 @@ validator({
 						<a href="classes/validate.html" class="tsd-kind-icon">Validate</a>
 					</li>
 					<li class=" tsd-kind-function">
-						<a href="globals.html#validator" class="tsd-kind-icon">validator</a>
+						<a href="index.html#validator" class="tsd-kind-icon">validator</a>
 					</li>
 				</ul>
 			</nav>

@@ -1,5 +1,5 @@
 # easy-object-validator
-深度校验一个对象的属性值是否合法
+深度校验一个值是否合法
 
 
 [![Travis (.org) branch](https://img.shields.io/travis/peakchen90/easy-object-validator/master.svg)](https://travis-ci.org/peakchen90/easy-object-validator)
@@ -43,14 +43,15 @@ const obj = {
       bar: null
     }
   }
-}
+};
+
 validator(obj, {
   foo: validator.test(/^\d+$/),
-  bar: validator.string().length(5),
+  bar: validator.string.length(5),
   child: {
-    foo: validator.boolean().isRequire(),
-    bar: validator.array().length(4),
-    child: validator.object()
+   foo: validator.boolean.isRequired,
+   bar: validator.array.length(4),
+   child: validator.object
   }
 })
 // true
@@ -60,7 +61,7 @@ validator(obj, {
 
 > validator 的校验规则基于 Validate 类
 
-[API参考](https://peakchen90.github.io/easy-object-validator/globals.html)
+[API参考](https://peakchen90.github.io/easy-object-validator/index.html)
 
 ## 结语
 用得不爽就造轮子😶，欢迎提issues或PR

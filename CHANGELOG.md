@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 2.0.0
+
+> 2019.09.20
+
+- 替换成TypeScript编写
+- string、number、func、boolean等数据类型提供getter
+- 一些其他优化
+
+
 ## 1.0.2
 
 > 2018.08.27

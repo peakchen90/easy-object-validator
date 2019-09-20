@@ -16,6 +16,7 @@
     "out": "./docs",
     "excludePrivate": true,
     "excludeProtected": true,
+    "readme": "none",
     "exclude": [
       "node_modules/**/*"
     ]
