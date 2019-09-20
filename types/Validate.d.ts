@@ -33,6 +33,8 @@ declare class Validate {
 
   arrayOf(validate: Validate): Validate;
 
+  shape(obj: Record<any, Validate>): Validate;
+
   oneOf(...validates: Validate[]): Validate;
 
   enums(...values: any[]): Validate;

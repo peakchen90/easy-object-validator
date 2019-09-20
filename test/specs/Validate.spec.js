@@ -110,6 +110,43 @@ describe('Validate', () => {
     expect(() => validate.arrayOf('foo')).toThrowError();
   });
 
+  test('.shape()', () => {
+    expect(validate.shape({
+      a: new Validate().number,
+      b: new Validate().string
+    }).$validate({
+      a: 123,
+      b: 'foo'
+    })).toBeTruthy();
+    reset();
+    expect(validate.shape({
+      a: new Validate().number,
+      b: new Validate().string
+    }).$validate({
+      a: 123
+    })).toBeTruthy();
+    reset();
+    expect(validate.shape({
+      a: new Validate().number
+    }).$validate({
+      a: 123,
+      b: 'foo'
+    })).toBeTruthy();
+    reset();
+    expect(validate.shape({
+      a: new Validate().number,
+      b: new Validate().string.isRequired,
+    }).$validate({
+      a: 123
+    })).toBeFalsy();
+    reset();
+    expect(validate.shape({}).$validate(123)).toBeFalsy();
+    reset();
+    expect(() => validate.shape('foo')).toThrowError();
+    reset();
+    expect(() => validate.shape({ a: 'foo' }).$validate({})).toThrowError();
+  });
+
   test('.oneOf()', () => {
     const v1 = new Validate().string;
     const v2 = new Validate().number;

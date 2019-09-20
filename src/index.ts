@@ -69,6 +69,7 @@ defineGetter(validator, 'test', () => (regexp: RegExp): Validate => new Validate
 defineGetter(validator, 'isType', () => (type: string): Validate => new Validate().isType(type));
 defineGetter(validator, 'equals', () => (value: any): Validate => new Validate().equals(value));
 defineGetter(validator, 'arrayOf', () => (validate: Validate): Validate => new Validate().arrayOf(validate));
+defineGetter(validator, 'shape', () => (obj: Record<any, Validate>): Validate => new Validate().shape(obj));
 defineGetter(validator, 'oneOf', () => (...validators: Validate[]): Validate => new Validate().oneOf(...validators));
 defineGetter(validator, 'enums', () => (...values: any[]): Validate => new Validate().enums(...values));
 defineGetter(validator, 'reset', () => (): Validate => new Validate().reset());

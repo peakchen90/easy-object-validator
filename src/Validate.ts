@@ -154,11 +154,39 @@ class Validate {
    */
   arrayOf(validate: Validate): Validate {
     if (!(validate instanceof Validate)) {
-      throw new TypeError('The parameter must be a instance of Validate');
+      throw new TypeError('validate should be a instance of Validate');
     }
     this._rules.push((value: any) => {
       return Validate.getType(value) === 'array'
         && value.every((val: any) => validate.$validate(val));
+    });
+    return this;
+  }
+
+  /**
+   * 校验是一个对象的属性是否合法
+   * @param obj
+   */
+  shape(obj: Record<any, Validate>): Validate {
+    if (Validate.getType(obj) !== 'object') {
+      throw new TypeError('obj should be a plain object');
+    }
+
+    this._rules.push((value: any) => {
+      if (Validate.getType(value) !== 'object') {
+        return false;
+      }
+      return Object.keys(obj).every((key) => {
+        const validate: Validate = obj[key];
+        const val: any = value[key];
+        if (!(validate instanceof Validate)) {
+          throw new TypeError('property should be a Validate instance');
+        }
+        if (val === undefined && !validate._isRequired) {
+          return true;
+        }
+        return validate.$validate(val);
+      });
     });
     return this;
   }

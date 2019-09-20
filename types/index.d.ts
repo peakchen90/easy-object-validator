@@ -33,6 +33,8 @@ declare namespace validator {
 
   function arrayOf(validate: Validate): Validate;
 
+  function shape(obj: Record<any, Validate>): Validate;
+
   function oneOf(...validates: Validate[]): Validate;
 
   function enums(...values: any[]): Validate;

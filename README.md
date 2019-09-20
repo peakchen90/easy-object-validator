@@ -51,7 +51,9 @@ validator(obj, {
   child: {
    foo: validator.boolean.isRequired,
    bar: validator.array.length(4),
-   child: validator.object
+   child: validator.shape({
+      bar: validator.isEmpty
+   })
   }
 })
 // true
